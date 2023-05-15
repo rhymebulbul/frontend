@@ -1,3 +1,7 @@
+div {
+    border-radius: 20px;
+}
+
 .main {
     display: flex;
     flex-direction: row;
@@ -5,29 +9,91 @@
     height: 700px;
 }
 
-.main .left{
+.left {
     display: flex;
     flex-direction: column;
     width: 30%;
 }
 
-.main .vl {
+.photo {
+    width: 50%;
+    height: 200px;
+    background-color: white;
+    margin: 20px auto;
+}
+
+.detail {
+    width: 50%;
+    background-color: white;
+    margin: 60px auto;
+}
+
+.detail .line {
+    display: flex;
+    padding-left: 25px;
+}
+
+.detail p {
+    font-weight: bolder;
+}
+
+.vl {
     border-left: 3px solid white;
     height: 100%;
-    
-}
-
-.main .right {
-    display: flex;
-    flex-direction: column;
 
 }
 
-.NextButton {
+.right {
     display: flex;
     flex-direction: column;
-    position:absolute;
-    top: 530px;
-    left: 1230px;
-   
+    width: 60%;
+    margin-left: 50px;
+}
+
+.right .row {
+    display: flex;
+    flex-direction:row;
+    padding-top: 20px;
+    margin-bottom: 20px;
+}
+
+
+.right h4, p{
+    margin-top: 10px;
+    margin-left:10px;
+}
+
+.right .NextButton {
+    display: flex;
+    flex-direction: column;
+    position: absolute;
+    right: 20px;
+    bottom: 20px;
+}
+
+.right .factor1{
+    background-color: white;
+    height: 200px;
+    width: 40%;
+    margin-right: 10px;
+}
+
+.right .factor2 {
+    background-color: white;
+    height: 200px;
+    width: 40%;
+    margin-left: 10px;
+}
+
+.right .factor3 {
+    background-color: white;
+    height: 100px;
+    width: 80%;
+    margin-bottom: 20px;
+}
+
+.right .factor4 {
+    background-color: white;
+    height: 200px;
+    width: 70%;
 }
