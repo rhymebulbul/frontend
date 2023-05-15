@@ -9,7 +9,7 @@ const DomainPage = (props) => {
     return (
         <Fragment>
             <Header />
-            <div>
+            <div className={classes.main}>
                 <h2> Select or enter the domain </h2>
                 <hr></hr>
                 <Domains/>
