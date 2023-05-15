@@ -16,7 +16,7 @@ const DomainPage = (props) => {
                 <hr></hr>
             </div>
             <div className={classes.NextButton}>
-                <Link to="/factor"><NextButton/></Link>
+                <Link to="/factor"><NextButton name="next"/></Link>
             </div>
         </Fragment>
     );

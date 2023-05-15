@@ -16,7 +16,7 @@ const FactorPage = (props) => {
                 <hr></hr>
             </div>
             <div className={classes.NextButton}>
-                <Link to="/persona"> <NextButton/></Link>
+                <Link to="/persona"> <NextButton name="next"/> </Link>
             </div>
         </Fragment>
     );

@@ -1,0 +1,33 @@
+.main {
+    display: flex;
+    flex-direction: row;
+    width: 100%;
+    height: 700px;
+}
+
+.main .left{
+    display: flex;
+    flex-direction: column;
+    width: 30%;
+}
+
+.main .vl {
+    border-left: 3px solid white;
+    height: 100%;
+    
+}
+
+.main .right {
+    display: flex;
+    flex-direction: column;
+
+}
+
+.NextButton {
+    display: flex;
+    flex-direction: column;
+    position:absolute;
+    top: 530px;
+    left: 1230px;
+   
+}
