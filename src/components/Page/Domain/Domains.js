@@ -4,7 +4,7 @@ import DomainItem from './DomainItem';
 const DUMMY_DOMAIN = [
     {
         id: 'd1',
-        name: 'technology',
+        name: 'Technology',
     },
     {
         id: 'd2',
@@ -24,19 +24,36 @@ const DUMMY_DOMAIN = [
     }
 ]
 
+const rows = DUMMY_DOMAIN.reduce(function (rows, key, index) {
+    return (index % 3 === 0 ? rows.push([key])
+        : rows[rows.length - 1].push(key)) && rows;
+}, []);
+
+
 const Domains = (props) => {
-    const domainList = DUMMY_DOMAIN.map((d) => (
-        <DomainItem
-            key={d.id}
-            id={d.id}
-            name={d.name}
+    const domainList1 = rows[0].map(item => (
+        <DomainItem 
+            key = {item.key}
+            id = {item.id}
+            name = {item.name}
+        />
+    ));
+
+    const domainList2 = rows[1].map(item => (
+        <DomainItem 
+            key = {item.key}
+            id = {item.id}
+            name = {item.name}
         />
     ));
 
     return (
         <section className={classes.domain}>
-            <div>
-                <ul>{domainList}</ul>
+            <div className = {classes.row}>
+                {domainList1}
+            </div>
+            <div className = {classes.row}>
+                {domainList2}
             </div>
         </section>
     );
