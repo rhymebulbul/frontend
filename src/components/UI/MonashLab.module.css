@@ -1,0 +1,19 @@
+.item {
+    display: flex;
+    flex-direction: column;
+    justify-content: space-evenly;
+}
+
+
+.item .lineone {
+    font-size: 22px;
+    margin-bottom: -3px;
+    margin-left: -2px;
+    color: #08D9D6
+}
+
+
+.item .linetwo {
+    font-size: 21px;
+    color: black
+}

@@ -1,0 +1,31 @@
+.main {
+    display: flex;
+    margin-top: 0px;
+    height: max-content;
+}
+
+.left {
+    display: flex;
+    flex-direction: column;
+    width: 50%;
+    margin-left: 40px;
+    margin-top: 40px;
+}
+
+.left h2{
+    margin-bottom: 20px;    
+}
+
+.left .domain {
+    
+}
+
+
+.left .factor {
+    margin-top: 100px;
+}
+
+.right {
+    margin-top: 40px;
+    width: 50%
+}

@@ -1,0 +1,4 @@
+.domain {
+    display: flex;
+    flex-direction: column;
+}
