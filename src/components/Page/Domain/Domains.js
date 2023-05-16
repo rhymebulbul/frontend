@@ -36,6 +36,7 @@ const Domains = (props) => {
             key = {item.key}
             id = {item.id}
             name = {item.name}
+            onClick = {props.onClick}
         />
     ));
 
@@ -44,6 +45,7 @@ const Domains = (props) => {
             key = {item.key}
             id = {item.id}
             name = {item.name}
+            onClick = {props.onClick}
         />
     ));
 

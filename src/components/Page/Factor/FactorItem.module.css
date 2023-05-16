@@ -5,3 +5,7 @@
     border-radius: 20px;
     text-align: center;
 }
+
+.item :hover{
+    text-decoration: underline;
+}
