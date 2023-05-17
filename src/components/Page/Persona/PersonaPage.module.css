@@ -111,3 +111,8 @@ div {
     box-shadow: 0 2px 5px #ccc;
 }
 
+.backButton {
+    position: absolute;
+    bottom: 20px;
+    left: 10px;
+}

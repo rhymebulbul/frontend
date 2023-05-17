@@ -2,6 +2,7 @@ import { Fragment } from 'react';
 import classes from './PersonaPage.module.css'
 import Header from '../../Layout/Header';
 import NextButton from '../../Layout/NextButton';
+import { Link } from 'react-router-dom';
 
 const PersonaPage = (props) => {
     return (
@@ -17,6 +18,10 @@ const PersonaPage = (props) => {
                             <li>Job: Retiree</li>
                         </ul>
                     </div>
+                    <div className={classes.backButton}>
+                        <Link to="/factor"> <NextButton name="back" /></Link>
+                    </div>
+
                 </div>
                 <div className={classes.vl}>
                 </div>
