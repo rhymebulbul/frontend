@@ -48,6 +48,7 @@ const ReviewPage = (props) => {
                         {domainOption}
                         </select>
                     </div>
+                    
                     <div className={classes.factor}>
                         <h2> Filter By Human Factor </h2>
                         

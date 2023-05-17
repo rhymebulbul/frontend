@@ -44,12 +44,15 @@ const DomainPage = (props) => {
                         />
                         <button type="submit">Set</button>
                     </form>
-
-
                 </div>
             </div>
-            <div className={classes.NextButton}>
-                <Link to="/factor"><NextButton name="next" /></Link>
+            <div className={classes.Buttons}>
+                <div className={classes.BackButton}>
+                    <Link to="/"> <NextButton name="back"/></Link>
+                </div>
+                <div className={classes.NextButton}>
+                    <Link to="/factor"> <NextButton name="next"/></Link>
+                </div>
             </div>
         </Fragment>
     );

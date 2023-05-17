@@ -1,61 +1,36 @@
 import classes from './Factors.module.css'
-import FactorItem from './FactorItem';
-
-const DUMMY_FACTOR = [
-    {
-        id: 'f1',
-        name: 'Education background',
-    },
-    {
-        id: 'f2',
-        name: 'Health challenge',
-    },
-    {
-        id: 'f3',
-        name: 'Occupation'
-    },
-    {
-        id: 'f4',
-        name: 'Technology Literacy'
-    },
-    {
-        id: 'f5',
-        name: 'Social interaction'
-    }
-]
-
-const rows = DUMMY_FACTOR.reduce(function (rows, key, index) {
-    return (index % 3 === 0 ? rows.push([key])
-        : rows[rows.length - 1].push(key)) && rows;
-}, []);
-
+import { useState } from 'react';
 const Factors = (props) => {
-    const factorList1 = rows[0].map(item => (
-        <FactorItem 
-            key = {item.key}
-            id = {item.id}
-            name = {item.name}
-        />
-    ));
 
-    const factorList2 = rows[1].map(item => (
-        <FactorItem 
-            key = {item.key}
-            id = {item.id}
-            name = {item.name}
-        />
-    ));
+    const [inputFactor, setInputFactor] = useState("");
+
+
+    function handleInputChange(event) {
+        setInputFactor(event.target.value);
+    }
+
+    function handleClick(event) {
+        if (inputFactor.length > 0) {
+            props.addFactor(inputFactor)
+            setInputFactor("")
+        }
+        event.preventDefault();
+    }
 
     return (
-        <section className={classes.factor}>
-            <div className = {classes.row}>
-                {factorList1}
-            </div>
-            <div className = {classes.row}>
-                {factorList2}
-            </div>
-        </section>
-    );
+        <div className={classes.main}>
+            <h4>Or enter the factors</h4>
+            <form onSubmit={handleClick}>
+                <input
+                    onChange={handleInputChange}
+                    type="text"
+                    placeholder='factor'
+                    value={inputFactor}
+                />
+                <button type="submit">Add</button>
+            </form>
+        </div>
+    )
 }
 
-export default Factors;
+export default Factors

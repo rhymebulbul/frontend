@@ -1,3 +1,11 @@
+.nobullets {
+    list-style-type: none;
+}
+
+.nobullets li {
+    margin: 8px auto;
+}
+
 div {
     border-radius: 20px;
 }
@@ -96,4 +104,10 @@ div {
     background-color: white;
     height: 200px;
     width: 70%;
+    
 }
+
+.factor1, .factor2, .factor3, .factor4, .detail {
+    box-shadow: 0 2px 5px #ccc;
+}
+

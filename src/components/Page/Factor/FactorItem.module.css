@@ -1,11 +1,26 @@
 .item {
-    background-color: white;
-    width: 20%;
-    margin: 0 20px;
-    border-radius: 20px;
-    text-align: center;
+    background: white;
+    display: flex;
+    flex-direction: row;
+    min-width: 100px;
+    min-height: 50px;
+    margin: 10px 20px;
+    white-space: pre-wrap;
+    word-wrap: normal;
 }
 
-.item :hover{
+.item button {
+    width: 30px;
+    height: 20px;
+    color:  #f5ba13;
+    outline: none;
+    border: none;
+    background-color: none;
+    background: none;
+    margin-top: 10px;
+    margin-left: 5px;
+}
+
+.item button:hover {
     text-decoration: underline;
 }

@@ -1,9 +1,29 @@
-.NextButton {
-    position: absolute;
-    top: 630px;
-    left: 1300px;
-}
+
 
 .main hr {
     border-top: 2px solid white;
+}
+
+.main .bottom {
+    min-height: 200px;
+    display: flex;
+    flex-direction: row;
+}
+
+.bottom .right {
+    position: relative;
+    top: 30px;
+    left: 50px;
+}
+
+.Buttons {
+    display: inline-flex;
+    position: absolute;
+    bottom: 20px;
+    width: 100%;
+}
+
+.NextButton {
+    position: absolute;
+    right: 20px;
 }

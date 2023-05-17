@@ -11,13 +11,14 @@ const PersonaPage = (props) => {
                 <div className={classes.left}>
                     <div className={classes.photo}></div>
                     <div className={classes.detail}>
-                        <div className={classes.line}><p>Name: name123</p></div>
-                        <div className={classes.line}><p>Age: 60</p></div>
-                        <div className={classes.line}><p>Job: Retiree</p></div>
+                        <ul className={classes.nobullets}>
+                            <li>Name: name123</li>
+                            <li>Age: 60</li>
+                            <li>Job: Retiree</li>
+                        </ul>
                     </div>
                 </div>
                 <div className={classes.vl}>
-
                 </div>
                 <div className={classes.right}>
                     <div className={classes.row}>
