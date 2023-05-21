@@ -8,7 +8,7 @@ const FactorItem = (props) => {
     return (
         <div className= {classes.item}>
             <span>{props.name}</span>
-            <button onClick = {handleClick}>delete</button>
+            <button onClick = {handleClick}>X</button>
         </div>
     );
 }

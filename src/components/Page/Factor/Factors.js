@@ -19,7 +19,7 @@ const Factors = (props) => {
 
     return (
         <div className={classes.main}>
-            <h4>Or enter the factors</h4>
+            <h4>Or Enter the Factors</h4>
             <form onSubmit={handleClick}>
                 <input
                     onChange={handleInputChange}

@@ -66,9 +66,9 @@ div {
 }
 
 
-.right h4, p{
+.right p{
     margin-top: 10px;
-    margin-left:10px;
+    margin-left:20px;
 }
 
 .right .NextButton {

@@ -4,7 +4,13 @@
 
 .domain {
     position: relative;
-    left: 40px;
+    cursor: pointer;
+    min-width: 500px;
+    padding-bottom: 20px;
+}
+
+.domain form{
+    padding-left: 20px;
 }
 
 .domain input {
@@ -22,24 +28,29 @@
 .domain button {
     appearance: none;
     outline: 0;
-    background-color: white;
+    background-color: blue;
     border: 0;
     padding: 5px 10px;
     border-radius: 3px;
     margin-top: 30px;
-    color: #50a3a2;
+    color: white;
     width: 100px;
     font-size: 15px;
+    cursor: pointer;
 }
 
 .Buttons {
     display: inline-flex;
+    bottom: 30px;
     position: absolute;
-    bottom: 20px;
     width: 100%;
+    cursor: pointer;
 }
 
 .NextButton {
     position: absolute;
     right: 20px;
+}
+h4, h2{
+    padding-left: 20px;
 }

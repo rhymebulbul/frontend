@@ -1,5 +1,3 @@
-
-
 .main hr {
     border-top: 2px solid white;
 }
@@ -12,18 +10,37 @@
 
 .bottom .right {
     position: relative;
-    top: 30px;
     left: 50px;
 }
 
 .Buttons {
     display: inline-flex;
-    position: absolute;
     bottom: 20px;
     width: 100%;
+}
+
+.right{
+    border: 5px solid white;
+    padding: 7px;
+    min-width: 500px;
+}
+
+.right h4 {
+    position: relative;
+    top: -20px;
 }
 
 .NextButton {
     position: absolute;
     right: 20px;
+}
+
+h4, h2{
+    padding-left: 20px;
+}
+
+.factorList {
+    padding-top: 0;
+    position: relative;
+    top: -20px;
 }

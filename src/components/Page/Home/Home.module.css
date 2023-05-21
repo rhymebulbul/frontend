@@ -2,9 +2,9 @@
     margin: auto;
     display: flex;
     flex-direction: column;
+    width: 100%;
     position: absolute;
     top: 170px;
-    width: 100%;
 }
 
 .main h2 {
@@ -26,5 +26,6 @@
     padding-top: 10px;
     width: 50%;
     align-items: center;
+    padding-bottom: 50px;
 }
 

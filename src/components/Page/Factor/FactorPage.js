@@ -44,16 +44,20 @@ const FactorPage = (props) => {
                 <div className={classes.bottom}>
                     <Factors addFactor={addFactor} deleteFactor={deleteFactor} />
                     <div className={classes.right}>
-                        {factors.map((item, index) => {
-                            return (
-                                <FactorItem
-                                    key={index}
-                                    id={index}
-                                    name={item}
-                                    onDelete={deleteFactor}
-                                />
-                            )
-                        })}
+                        <h4>Selected  Factor</h4>
+                        <div className={classes.factorList}>
+                            {factors.map((item, index) => {
+                                return (
+                                    <FactorItem
+                                        key={index}
+                                        id={index}
+                                        name={item}
+                                        onDelete={deleteFactor}
+                                    />
+                                )
+                            })}
+                        </div>
+
                     </div>
 
                 </div>

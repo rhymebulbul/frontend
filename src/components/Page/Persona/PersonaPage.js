@@ -46,7 +46,7 @@ const PersonaPage = (props) => {
                     </div>
                     <div className={classes.NextButton}>
                         <NextButton name="EXPORT" />
-                        <NextButton name="REGENERATe" />
+                        <NextButton name="REGENERAT" />
                         <NextButton name="EDIT" />
                         <NextButton name="SAVE" />
                     </div>

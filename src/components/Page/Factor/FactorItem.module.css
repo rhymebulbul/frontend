@@ -1,24 +1,27 @@
 .item {
-    background: white;
     display: flex;
     flex-direction: row;
-    min-width: 100px;
+    min-width: 30px;
+    max-width: 250px;
     min-height: 50px;
     margin: 10px 20px;
     white-space: pre-wrap;
     word-wrap: normal;
 }
 
+.item span{
+    background: white;
+    padding: 10px;
+    border-radius: 10px 0px 0px 10px
+}
+
 .item button {
-    width: 30px;
-    height: 20px;
-    color:  #f5ba13;
+    color:  white;
     outline: none;
     border: none;
-    background-color: none;
-    background: none;
-    margin-top: 10px;
-    margin-left: 5px;
+    cursor: pointer;
+    background: #F5BA13;
+    padding: 15px 15px;
 }
 
 .item button:hover {

@@ -8,9 +8,11 @@ const Header = () => {
   return (
     <Fragment>
       <header className={classes.header}>
-          <div className={classes.monash_icon}>
-            <MonashLab />
-          </div>
+         <Link to ="/">
+            <div className={classes.monash_icon} >
+              <MonashLab />
+            </div>
+          </Link>
           <div className={classes.buttons}>
             <span> <Link to ="/"> Home</Link></span>
             <span><Link to="/review">Persona History</Link></span>

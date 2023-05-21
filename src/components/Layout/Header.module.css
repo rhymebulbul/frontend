@@ -9,6 +9,7 @@
     align-items: center;
     padding: 0 10%;
     box-shadow: 0 2px 8px rgba(0, 0, 0, 0.25);
+    cursor: pointer;
 
   }
 
@@ -30,6 +31,18 @@
 .buttons span {
   color: black;
   margin: 0 45px;
-  text-decoration: underline;
   font-size: 21px;
+}
+
+:link{
+  text-decoration: none;
+  
+}
+
+.buttons span :hover{
+    text-decoration: underline;
+}
+
+.buttons span a{
+  color: black;
 }

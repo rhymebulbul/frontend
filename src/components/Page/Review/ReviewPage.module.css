@@ -2,6 +2,7 @@
     display: flex;
     margin-top: 0px;
     height: max-content;
+    cursor: pointer;
 }
 
 .left {
@@ -37,5 +38,6 @@
 
 .right {
     margin-top: 40px;
-    width: 50%
+    width: 50%;
+    padding-right: 8%;
 }
