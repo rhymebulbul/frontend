@@ -23,6 +23,8 @@
     border: 5px solid white;
     padding: 7px;
     min-width: 500px;
+    position: relative;
+    top: 20px;
 }
 
 .right h4 {
@@ -30,9 +32,14 @@
     top: -20px;
 }
 
+.BackButton {
+    position: absolute;
+    bottom: 30px;
+}
 .NextButton {
     position: absolute;
     right: 20px;
+    bottom: 30px;
 }
 
 h4, h2{

@@ -50,9 +50,10 @@ const DomainPage = (props) => {
                 <div className={classes.BackButton}>
                     <Link to="/"> <NextButton name="back"/></Link>
                 </div>
-                <div className={classes.NextButton}>
+                
+                {domain && <div className={classes.NextButton}>
                     <Link to="/factor"> <NextButton name="next"/></Link>
-                </div>
+                </div>}
             </div>
         </Fragment>
     );

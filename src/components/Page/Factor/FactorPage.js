@@ -9,11 +9,11 @@ import FactorItem from './FactorItem';
 
 const FactorPage = (props) => {
 
-    const [factors, setFactors] = useState([]);
+    const [factors, setFactors] = useState(['goal', 'frustation']);
 
 
     function addFactor(newFactor) {
-        setFactors(prev => {
+        setFactors(prev => {    
             return [...prev, newFactor];
         })
     }
@@ -66,9 +66,9 @@ const FactorPage = (props) => {
                 <div className={classes.BackButton}>
                     <Link to="/domain"> <NextButton name="back" /></Link>
                 </div>
-                <div className={classes.NextButton}>
+                { factors.length >= 4 && <div className={classes.NextButton}>
                     <Link to="/persona"> <NextButton name="next" /></Link>
-                </div>
+                </div>}
             </div>
 
         </Fragment>

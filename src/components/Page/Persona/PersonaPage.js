@@ -3,6 +3,7 @@ import classes from './PersonaPage.module.css'
 import Header from '../../Layout/Header';
 import NextButton from '../../Layout/NextButton';
 import { Link } from 'react-router-dom';
+import avatar from './../../../images/avatar.png';
 
 const PersonaPage = (props) => {
     return (
@@ -10,10 +11,12 @@ const PersonaPage = (props) => {
             <Header />
             <div className={classes.main}>
                 <div className={classes.left}>
-                    <div className={classes.photo}></div>
+                    <div className={classes.photo}>
+                        <img src = {avatar} alt=''/>
+                    </div>
                     <div className={classes.detail}>
                         <ul className={classes.nobullets}>
-                            <li>Name: name123</li>
+                            <li>Name: Hailm</li>
                             <li>Age: 60</li>
                             <li>Job: Retiree</li>
                         </ul>
@@ -33,20 +36,20 @@ const PersonaPage = (props) => {
                         </div>
                         <div className={classes.factor2}>
                             <h4>Frustration: </h4>
-                            <p>Lives all by himself after his wift passed away a year ago</p>
+                            <p>He finds that it takes too much effort to learn about new devices associated to mobile technology such as mobile phone, smart phone and tablet even though he is aware about the benefits of using them.He claims that he has difficulties in remembering things.</p>
                         </div>
                     </div>
                     <div className={classes.factor3}>
                         <h4>Goal: </h4>
-                        <p>Lives all by himself after his wift passed away a year ago</p>
+                        <p>To use mobile technology with minimal effort and learning stages.</p>
                     </div>
                     <div className={classes.factor4}>
                         <h4> Adaptation to Technology: </h4>
-                        <p>Lives all by himself after his wift passed away a year ago</p>
+                        <p>Hailm is open to adopting new technologies, as long as they can improve his quality of life and help him maintain her independence. He understands the potential benefits of technology but requires clear instructions and hands-on support to feel comfortable using it.</p>
                     </div>
                     <div className={classes.NextButton}>
                         <NextButton name="EXPORT" />
-                        <NextButton name="REGENERAT" />
+                        <NextButton name="REGENERATE" />
                         <NextButton name="EDIT" />
                         <NextButton name="SAVE" />
                     </div>

@@ -10,6 +10,19 @@ div {
     border-radius: 20px;
 }
 
+.photo {
+    background-color: none;
+    margin-top: 40px;
+}
+
+.photo img {
+    border-radius: 10%;
+    width: 200px;
+    height: 200px;
+    position: relative;
+    left: 10px;
+}
+
 .main {
     display: flex;
     flex-direction: row;
@@ -26,7 +39,6 @@ div {
 .photo {
     width: 50%;
     height: 200px;
-    background-color: white;
     margin: 20px auto;
 }
 
@@ -47,8 +59,7 @@ div {
 
 .vl {
     border-left: 3px solid white;
-    height: 100%;
-
+    height: 107%;
 }
 
 .right {
@@ -89,7 +100,7 @@ div {
 .right .factor2 {
     background-color: white;
     height: 200px;
-    width: 40%;
+    width: 50%;
     margin-left: 10px;
 }
 
@@ -98,13 +109,14 @@ div {
     height: 100px;
     width: 80%;
     margin-bottom: 20px;
+    margin-top: 20px;
 }
 
 .right .factor4 {
     background-color: white;
     height: 200px;
     width: 70%;
-    
+    margin-top: 20px;
 }
 
 .factor1, .factor2, .factor3, .factor4, .detail {

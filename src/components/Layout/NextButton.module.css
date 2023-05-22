@@ -17,6 +17,7 @@
 
 .button:hover,
 .button:active {
-    background-color: yellow;
+    background-color: #2E7BED;
+    color: white;
     cursor: pointer;
 }

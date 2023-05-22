@@ -16,11 +16,15 @@ const DUMMY_FACTOR = [
     },
     {
         id: 'f4',
-        name: 'Technology Literacy'
+        name: 'Adaptation to Technology'
     },
     {
         id: 'f5',
         name: 'Social interaction'
+    },
+    {
+        id: 'f6',
+        name: 'Living Arrangement'
     }
 ]
 
