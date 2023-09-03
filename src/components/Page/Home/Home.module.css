@@ -9,12 +9,14 @@
 
 .main h2 {
     margin: 2rem auto;
+    color: #2E7BED;
 }
 
 .main p {
     margin-top: 40px;
     text-align: center;
     padding-bottom: 40px;
+    color: #2E7BED;
 }
 
 .button {
