@@ -16,7 +16,7 @@ const Header = () => {
           <div className={classes.buttons}>
             <span> <Link to ="/"> Home</Link></span>
             <span><Link to="/review">Persona History</Link></span>
-            <span>Setting</span>
+            <span><Link to="/signin">Sign In</Link></span>
           </div>
       </header>
     </Fragment>

@@ -9,15 +9,10 @@
 
 .main h2 {
     margin: 2rem auto;
-    color: #2E7BED;
+    font-size: 56px;
+    color:#347FEE;
 }
 
-.main p {
-    margin-top: 40px;
-    text-align: center;
-    padding-bottom: 40px;
-    color: #2E7BED;
-}
 
 .button {
     display: flex;
@@ -25,7 +20,7 @@
     position: absolute;
     top: 400px;
     left: 25%;
-    padding-top: 10px;
+    padding-top: 50px;
     width: 50%;
     align-items: center;
     padding-bottom: 50px;

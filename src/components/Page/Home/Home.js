@@ -10,16 +10,15 @@ const Home = (props) => {
             <Header />
             <div>
                 <div className={classes.main}>
-                    <h2 className={classes.title}>Make My Persona</h2>
-                    <p className={classes.desc}>Create a persona which can help analyse the needs of target users</p>
+                    <h2 className={classes.title}>Let's MAKE YOUR PERSONA BY AI</h2>
                 </div>
                 <div className={classes.button}>
-                    <Link to='/domain' style={{ textDecoration: "none" }}>
+                    <Link to='/domainAndFactor' style={{ textDecoration: "none"  ,width:"300px"}}>
                         <HomeButton
                             name="Build My Persona"
                         />
                     </Link>
-                    <Link to='/review' style={{ textDecoration: "none" }} >
+                    <Link to='/review' style={{ textDecoration: "none"  ,width:"300px"}} >
                         <HomeButton
                             name="Review My Persona"
                         />
