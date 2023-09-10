@@ -1,9 +1,11 @@
 import * as React from 'react';
+import { useState, useContext, useEffect } from 'react';
+import { useNavigate } from 'react-router-dom';
 import Button from '@mui/material/Button';
+import Snackbar from '@mui/material/Snackbar';
+import Alert from '@mui/lab/Alert';
 import CssBaseline from '@mui/material/CssBaseline';
 import TextField from '@mui/material/TextField';
-import FormControlLabel from '@mui/material/FormControlLabel';
-import Checkbox from '@mui/material/Checkbox';
 import Link from '@mui/material/Link';
 import Grid from '@mui/material/Grid';
 import Box from '@mui/material/Box';
@@ -11,33 +13,37 @@ import Typography from '@mui/material/Typography';
 import Container from '@mui/material/Container';
 import { createTheme, ThemeProvider } from '@mui/material/styles';
 import Header from '../../Layout/Header';
-
-
-function Copyright(props) {
-  return (
-    <Typography variant="body2" color="text.secondary" align="center" {...props}>
-      {'Copyright © '}
-      <Link color="inherit" href="https://mui.com/">
-        Your Website
-      </Link>{' '}
-      {new Date().getFullYear()}
-      {'.'}
-    </Typography>
-  );
-}
-
-// TODO remove, this demo shouldn't need to reset the theme.
+import { AuthContext } from '../../../shared/context/Auth-context';
+import { useHttpClient } from "../../../shared/hooks/http-hook";
 
 const defaultTheme = createTheme();
 
 export default function SignIn() {
-  const handleSubmit = (event) => {
+  const [email, setEmail] = useState('');
+  const [password, setPassword] = useState('');
+  const [openSnackbar, setOpenSnackbar] = useState(false);
+  const { isLoading, error, sendRequest, clearError } = useHttpClient();
+  const auth = useContext(AuthContext);
+  const navigate = useNavigate();
+
+  const handleSubmit = async (event) => {
     event.preventDefault();
-    const data = new FormData(event.currentTarget);
-    console.log({
-      email: data.get('email'),
-      password: data.get('password'),
-    });
+
+    try {
+      const responseData = await sendRequest(
+        "http://localhost:8081/api/auth/signin",
+        "POST",
+        JSON.stringify({ email, password }),
+        {
+          "Content-Type": "application/json",
+        }
+      );
+
+      auth.login(responseData.userId, responseData.token);
+      navigate('/'); // Navigate to the main page on successful login
+    } catch (err) {
+      setOpenSnackbar(true); // Show the Snackbar when there's an error
+    }
   };
 
   return (
@@ -53,10 +59,12 @@ export default function SignIn() {
             alignItems: 'center',
           }}
         >
-
           <Typography component="h1" variant="h5">
             Sign in
           </Typography>
+
+          {error && <p style={{ color: "red" }}>{error}</p>} {/* Display any error messages here */}
+
           <Box component="form" onSubmit={handleSubmit} noValidate sx={{ mt: 1 }}>
             <TextField
               margin="normal"
@@ -67,6 +75,8 @@ export default function SignIn() {
               name="email"
               autoComplete="email"
               autoFocus
+              value={email}
+              onChange={e => setEmail(e.target.value)}
             />
             <TextField
               margin="normal"
@@ -77,34 +87,33 @@ export default function SignIn() {
               type="password"
               id="password"
               autoComplete="current-password"
-            />
-            <FormControlLabel
-              control={<Checkbox value="remember" color="primary" />}
-              label="Remember me"
+              value={password}
+              onChange={e => setPassword(e.target.value)}
             />
             <Button
               type="submit"
               fullWidth
               variant="contained"
               sx={{ mt: 3, mb: 2 }}
+              disabled={isLoading}
             >
-              Sign In
+              {isLoading ? "Signing in..." : "Sign In"}
             </Button>
             <Grid container>
-              <Grid item xs>
-                <Link href="#" variant="body2">
-                  Forgot password?
-                </Link>
-              </Grid>
               <Grid item>
-                <Link href="#" variant="body2">
+                <Link href='/signup' variant="body2">
                   {"Don't have an account? Sign Up"}
                 </Link>
               </Grid>
             </Grid>
           </Box>
         </Box>
-        <Copyright sx={{ mt: 8, mb: 4 }} />
+
+        <Snackbar open={openSnackbar} autoHideDuration={6000} onClose={() => setOpenSnackbar(false)}>
+          <Alert onClose={() => setOpenSnackbar(false)} severity="error" sx={{ width: '100%' }}>
+            Failed to login. Please check your credentials.
+          </Alert>
+        </Snackbar>
       </Container>
     </ThemeProvider>
   );

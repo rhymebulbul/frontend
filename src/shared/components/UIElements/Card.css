@@ -1,0 +1,63 @@
+.card {
+  margin: 0;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.26);
+  border-radius: 6px;
+  padding: 1rem;
+  overflow: hidden;
+  background: white;
+}
+
+.detail_card {
+  margin: 1rem;
+}
+
+.domain_card {
+  display: flex;
+  flex-wrap: wrap;
+  align-content: flex-start;
+  row-gap: 0.2em;
+  margin: 0 auto;
+}
+
+.appear_normal {
+  animation: persona-appear 2s ease-out forwards;
+}
+
+.appear_fast {
+  animation: persona-fast-appear 1s ease-out forwards;
+}
+
+@keyframes persona-fast-appear {
+  0% {
+    opacity: 0;
+    transform: translateY(3rem);
+  }
+
+  100% {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+@keyframes persona-appear {
+  0% {
+    opacity: 0;
+    transform: translateY(3rem);
+  }
+
+  50% {
+    opacity: 0;
+    transform: translateY(3rem);
+  }
+
+  100% {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+.close_card {
+  position: absolute;
+  top: 1.5rem;
+  right: 2rem
+}

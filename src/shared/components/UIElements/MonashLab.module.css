@@ -1,0 +1,21 @@
+.item {
+    display: flex;
+    flex-direction: column;
+    justify-content: space-evenly;
+    text-decoration: none;
+}
+
+
+.item .lineone {
+    font-size: 22px;
+    font-weight: bold;
+    margin-bottom: -3px;
+    margin-left: -2px;
+    color: #2E7bED;
+}
+
+
+.item .linetwo {
+    font-size: 21px;
+    color: black;
+}
