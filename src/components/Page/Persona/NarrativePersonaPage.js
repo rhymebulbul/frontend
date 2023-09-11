@@ -92,6 +92,8 @@ Teresa also loves TV so much so that her parents have decided to get rid of the 
                 <NextButton name = {edit ? "Edit Mode ON" : "Edit Mode OFF"} onClickCallback = {handleEdit} backgroundColourChange = {true}/>
               </Grid>
 
+              <AddFactorModal/>
+
               <Grid item xs={2} >
                 <NextButton name={"Export As PDF"} onClickCallback={captureAreaAndDownloadPDF} />
               </Grid>
@@ -103,7 +105,6 @@ Teresa also loves TV so much so that her parents have decided to get rid of the 
               <Grid item xs={2} >
                 <NextButton name = {"Save"} />
               </Grid>
-
               </Grid>
              </Grid>
 
@@ -114,8 +115,6 @@ Teresa also loves TV so much so that her parents have decided to get rid of the 
             <Grid item xs={2} >
                 <RegenerateModal />
             </Grid>
-
-            <AddFactorModal/>
         </Container>
         </div>
     );
