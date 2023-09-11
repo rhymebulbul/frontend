@@ -7,6 +7,7 @@ import InfoCard from '../../Layout/InfoCard';
 import * as React from 'react';
 import html2canvas from 'html2canvas';
 import jsPDF from 'jspdf';
+import RegenerateModal from './RegenerateModal';
 
 
 const NarrativePersonaPage = (props) => {
@@ -102,14 +103,16 @@ Teresa also loves TV so much so that her parents have decided to get rid of the 
                 <NextButton name = {"Save"} />
               </Grid>
 
-              
-
               </Grid>
              </Grid>
 
             <div id="captureArea">
             <InfoCard name={"Persona"} content={testing} editVisible={edit} removeVisible={false} setContent={setCardContent}/>
             </div>
+
+            <Grid item xs={2} >
+                <RegenerateModal />
+            </Grid>
         </Container>
         </div>
     );
