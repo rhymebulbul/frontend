@@ -1,5 +1,5 @@
 import React, { useState } from "react";
-import { Grid , Container, Paper} from '@mui/material';
+import { Grid , Container, Paper, Divider} from '@mui/material';
 //import "./Modal.css";
 import DividerText from "./DividerText";
 
@@ -22,14 +22,14 @@ const style = {
   p: 4,
 };
 
-export default function RegenerateModal() {
+export default function AddFactorModal() {
   const [open, setOpen] = React.useState(false);
   const handleOpen = () => setOpen(true);
   const handleClose = () => setOpen(false);
 
   return (
     <div>
-      <Button onClick={handleOpen}>Regenerate Content</Button>
+      <Button onClick={handleOpen}>Add Factors</Button>
       <Modal
         open={open}
         onClose={handleClose}
@@ -38,19 +38,18 @@ export default function RegenerateModal() {
       >
         <Box sx={style}>
           <Typography id="modal-modal-title" variant="h6" component="h2">
-            Select Option:
+            Add Human Factor:
           </Typography>
           {/*Need TO link backend*/}
           <Box textAlign={'center'}>
-          <Button ali>Regenerate all content</Button>
+          <Button ali>Select Factor</Button>
           </Box>
-          <DividerText/>
           <Box textAlign={'Center'}>
           <TextField
           fullWidth 
           type="text"
           id="content"
-          label="Copy Paste Specific Content"
+          label="Description"
           variant="outlined"
           inputProps={{
           style: {
@@ -58,7 +57,7 @@ export default function RegenerateModal() {
           },
         }}
       />
-          <Button>Submit</Button>
+          <Button>Add</Button>
           </Box>
         </Box>
       </Modal>
