@@ -46,7 +46,18 @@ export default function BasicModal() {
           </Box>
           <DividerText/>
           <Box textAlign={'Center'}>
-          <TextField fullWidth id="content" label="Copy Paste Specific Content" variant="outlined" />
+          <TextField
+          fullWidth 
+          type="text"
+          id="content"
+          label="Copy Paste Specific Content"
+          variant="outlined"
+          inputProps={{
+          style: {
+            height: "400px",
+          },
+        }}
+      />
           <Button>Submit</Button>
           </Box>
         </Box>
