@@ -3,6 +3,7 @@ import NextButton from '../../Layout/NextButton';
 import { Grid , Container} from '@mui/material';
 import InfoCard from '../../Layout/InfoCard';
 import * as React from 'react';
+import RegenerateModal from './RegenerateModal'
 
 const BulletPointPersonaPage = (props) => {
 
@@ -60,6 +61,10 @@ const BulletPointPersonaPage = (props) => {
             <Grid item xs>
                 <InfoCard title = {'testing'} content = {"hi"} editVisible= {edit} removeVisible = {edit}/>
             </Grid>
+            </Grid>
+
+            <Grid item xs={2} >
+                <RegenerateModal />
             </Grid>
         </Container>
         </div>
