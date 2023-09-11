@@ -8,6 +8,7 @@ import * as React from 'react';
 import html2canvas from 'html2canvas';
 import jsPDF from 'jspdf';
 import RegenerateModal from './RegenerateModal';
+import AddFactorModal from './AddFactorModal';
 
 
 const NarrativePersonaPage = (props) => {
@@ -113,6 +114,8 @@ Teresa also loves TV so much so that her parents have decided to get rid of the 
             <Grid item xs={2} >
                 <RegenerateModal />
             </Grid>
+
+            <AddFactorModal/>
         </Container>
         </div>
     );
