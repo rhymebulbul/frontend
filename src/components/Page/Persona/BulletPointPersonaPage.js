@@ -4,6 +4,7 @@ import { Grid , Container} from '@mui/material';
 import InfoCard from '../../Layout/InfoCard';
 import * as React from 'react';
 import RegenerateModal from './RegenerateModal'
+import AddFactorModal from './AddFactorModal';
 
 const BulletPointPersonaPage = (props) => {
 
@@ -30,6 +31,8 @@ const BulletPointPersonaPage = (props) => {
               <Grid item xs={2} >
                 <NextButton name = {edit ? "Edit Mode ON" : "Edit Mode OFF"} onClickCallback = {handleEdit} backgroundColourChange = {true}/>
               </Grid>
+
+              <AddFactorModal/>
 
               <Grid item xs={2} >
                 <NextButton name = {"Export As PDF "} />
