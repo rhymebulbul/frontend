@@ -1,7 +1,8 @@
 import React, { useState } from "react";
 import { Grid , Container, Paper, Divider} from '@mui/material';
 //import "./Modal.css";
-import DividerText from "./DividerText";
+import Header from "../../Layout/Header";
+import NextButton from "../../Layout/NextButton";
 
 import Box from '@mui/material/Box';
 import Button from '@mui/material/Button';
@@ -29,7 +30,9 @@ export default function AddFactorModal() {
 
   return (
     <div>
-      <Button onClick={handleOpen}>Add Factors</Button>
+      <Grid item xs={2} >
+                <NextButton name = {"Add Factors"} onClickCallback={handleOpen}/>
+      </Grid>
       <Modal
         open={open}
         onClose={handleClose}

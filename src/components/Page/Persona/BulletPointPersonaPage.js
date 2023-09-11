@@ -38,7 +38,6 @@ const BulletPointPersonaPage = (props) => {
               <Grid item xs={2} >
                 <NextButton name = {"Save"} />
               </Grid>
-
               
 
               </Grid>
