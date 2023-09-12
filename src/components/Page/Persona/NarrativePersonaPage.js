@@ -7,6 +7,8 @@ import InfoCard from '../../Layout/InfoCard';
 import * as React from 'react';
 import html2canvas from 'html2canvas';
 import jsPDF from 'jspdf';
+import RegenerateModal from './RegenerateModal';
+import AddFactorModal from './AddFactorModal';
 
 
 const NarrativePersonaPage = (props) => {
@@ -90,6 +92,8 @@ Teresa also loves TV so much so that her parents have decided to get rid of the 
                 <NextButton name = {edit ? "Edit Mode ON" : "Edit Mode OFF"} onClickCallback = {handleEdit} backgroundColourChange = {true}/>
               </Grid>
 
+              <AddFactorModal/>
+
               <Grid item xs={2} >
                 <NextButton name={"Export As PDF"} onClickCallback={captureAreaAndDownloadPDF} />
               </Grid>
@@ -101,15 +105,16 @@ Teresa also loves TV so much so that her parents have decided to get rid of the 
               <Grid item xs={2} >
                 <NextButton name = {"Save"} />
               </Grid>
-
-              
-
               </Grid>
              </Grid>
 
             <div id="captureArea">
             <InfoCard name={"Persona"} content={testing} editVisible={edit} removeVisible={false} setContent={setCardContent}/>
             </div>
+
+            <Grid item xs={2} >
+                <RegenerateModal />
+            </Grid>
         </Container>
         </div>
     );
