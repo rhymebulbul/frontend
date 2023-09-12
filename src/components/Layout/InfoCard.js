@@ -8,12 +8,9 @@ import Typography from '@mui/material/Typography';
 import TextField from '@mui/material/TextField';
 
 
-const InfoCard = ({ title, content, editVisible, removeVisible,setContent }) => {
+const InfoCard = ({ title, content, editVisible, removeVisible, onDelete }) => {
   const [isEditable, setIsEditable] = useState(false);
   const [cardText, setCardText] = useState(content);
-  const [isVisible, setIsVisible] = useState(true);
-
-
 
   const handleEditClick = () => {
     setIsEditable(!isEditable);
@@ -21,15 +18,16 @@ const InfoCard = ({ title, content, editVisible, removeVisible,setContent }) => 
 
   const handleTextChange = (e) => {
     const newText = e.target.value;
-    setContent(newText); // Update the parent's state as well
-    setCardText(newText); // Update the component's local state
+    setCardText(newText);
   };
 
   const handleRemoveClick = () => {
-    setIsVisible(false);
+    if (onDelete) {
+      onDelete();  // Notify the parent component about the deletion
+    }
   };
 
-  return isVisible ? (
+  return (
     <Box sx={{ minWidth: 275 }}>
       <Card variant="outlined">
         <CardContent>
@@ -62,7 +60,7 @@ const InfoCard = ({ title, content, editVisible, removeVisible,setContent }) => 
         </CardActions>
       </Card>
     </Box>
-  ) : null;
+  );
 }
 
 export default InfoCard;

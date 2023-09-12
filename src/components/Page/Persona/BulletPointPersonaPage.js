@@ -10,6 +10,20 @@ const BulletPointPersonaPage = (props) => {
 
     const [edit, setEdit] = React.useState(false);
 
+    const [cards, setCards] = React.useState([
+        { id: 1, title: 'testing', content: 'hi' },
+        { id: 2, title: 'testing', content: 'hi' },
+        { id: 3, title: 'testing', content: 'hihihihihihhihihihihihhihihihihihhihihihihihhihihihihihhihihihihihhihihihihihhihihihihihhihihihihihhihihihihih' },
+        { id: 4, title: 'testing', content: 'hi' },
+        { id: 5, title: 'testing', content: 'hi' }
+    ]);
+
+    const handleDelete = (idToDelete) => {
+        setCards(prevCards => prevCards.filter(card => card.id !== idToDelete));
+    }
+
+
+
 
     const handleEdit = () => {
         edit ? setEdit(false) : setEdit(true);
@@ -52,22 +66,17 @@ const BulletPointPersonaPage = (props) => {
                 </Grid>
 
                 <Grid container spacing={3} sx={{ m: 3 }}>
-                    <Grid item xs>
-                        <InfoCard title={'testing'} content={"hi"} editVisible={edit} removeVisible={edit} />
-                    </Grid>
-                    <Grid item xs={6}>
-                        <InfoCard title={'testing'} content={"hi"} editVisible={edit} removeVisible={edit} />
-
-                    </Grid>
-                    <Grid item xs>
-                        <InfoCard title={'testing'} content={"hi"} editVisible={edit} removeVisible={edit} />
-                    </Grid>
-                    <Grid item xs>
-                        <InfoCard title={'testing'} content={"hi"} editVisible={edit} removeVisible={edit} />
-                    </Grid>
-                    <Grid item xs>
-                        <InfoCard title={'testing'} content={"hi"} editVisible={edit} removeVisible={edit} />
-                    </Grid>
+                    {cards.map((card) => (
+                        <Grid item xs key={card.id}>
+                            <InfoCard
+                                title={card.title}
+                                content={card.content}
+                                editVisible={edit}
+                                removeVisible={edit}
+                                onDelete={() => handleDelete(card.id)}
+                            />
+                        </Grid>
+                    ))}
                 </Grid>
 
 
