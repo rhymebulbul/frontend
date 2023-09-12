@@ -1,0 +1,22 @@
+.main {
+  display: flex;
+  flex-direction: row;
+  width: 100%;
+}
+
+.filter {
+  margin-left: 10rem;
+  display: flex;
+  flex-direction: column;
+  position: relative;
+  width: 40%;
+  top: 100%;
+  padding-top: 10rem;
+  padding-left: 1rem;
+}
+
+.personas {
+  position: relative;
+  top: 100%;
+  width: 100%;
+}

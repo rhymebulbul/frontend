@@ -1,6 +1,6 @@
 import DomainAndFactorPage from './components/Page/DomainAndFactor/DomainAndFactorPage';
 import Home from './components/Page/Home/Home';
-import ReviewPage from './components/Page/Review/ReviewPage';
+import ReviewPage from './components/Page/Review//pages/Review';
 import { BrowserRouter, Routes, Route } from 'react-router-dom';
 import NarrativedPersonaPage from './components/Page/Persona/NarrativePersonaPage';
 import DimensionPage from './components/Page/Dimension/DimensionPage';
