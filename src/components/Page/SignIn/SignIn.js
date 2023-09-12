@@ -3,7 +3,7 @@ import { useState, useContext, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 import Button from '@mui/material/Button';
 import Snackbar from '@mui/material/Snackbar';
-import Alert from '@mui/lab/Alert';
+import { Alert } from '@mui/material';
 import CssBaseline from '@mui/material/CssBaseline';
 import TextField from '@mui/material/TextField';
 import Link from '@mui/material/Link';
@@ -48,7 +48,7 @@ export default function SignIn() {
 
   return (
     <ThemeProvider theme={defaultTheme}>
-      <Header/>
+      <Header />
       <Container component="main" maxWidth="xs">
         <CssBaseline />
         <Box

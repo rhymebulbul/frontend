@@ -1,50 +1,48 @@
 .header {
-    position: sticky;
-    top: 0;
-    width: 100%;
-    height: 5rem;
-    background-color:white;
-    color: white;
-    display: flex;
-    align-items: center;
-    padding: 0 10%;
-    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.25);
-    cursor: pointer;
+  position: sticky;
+  top: 0;
+  width: 100%;
+  height: 5rem;
+  background-color: white;
+  color: white;
+  display: flex;
+  align-items: center;
+  padding: 0 10%;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.25);
+  cursor: pointer;
 
-  }
+}
 
 .monash_icon {
-  flex-shrink: 0;
-  /* Prevent this from shrinking */
   align-items: center;
   position: relative;
   left: -100px;
   margin-right: 10px;
 }
 
+
 .buttons {
-  flex-grow: 1;
-  /* Let it grow to occupy remaining space */
-  display: flex;
   margin: 0 20px;
-  justify-content: space-between;
+  justify-content: space-evenly;
   position: relative;
-  left: 30px;
+  left: 30px
 }
 
 .buttons span {
   color: black;
+  margin: 0 45px;
   font-size: 21px;
 }
-:link{
+
+:link {
   text-decoration: none;
-  
+
 }
 
-.buttons span :hover{
-    text-decoration: underline;
+.buttons span :hover {
+  text-decoration: underline;
 }
 
-.buttons span a{
+.buttons span a {
   color: black;
 }

@@ -1,4 +1,4 @@
-import {Typography,Grid,Box,TextField,Container} from '@mui/material';
+import { Typography, Grid, Box, TextField, Container } from '@mui/material';
 import Header from '../../Layout/Header';
 import NewDomainDialog from './NewDomain';
 import * as React from 'react';
@@ -8,16 +8,26 @@ import MultipleSelectableList from '../../Layout/MultipleSelectableList';
 import NextButton from '../../Layout/NextButton';
 import { Link } from 'react-router-dom';
 
+const textareaStyles = {
+  width: '100%',
+  padding: '20px 0 6px 0',
+  border: 'none',
+  borderBottom: '1px solid rgba(0, 0, 0, 0.23)',
+  fontSize: '1rem',
+  boxSizing: 'border-box',
+  outline: 'none',
+  resize: 'none'
+};
 
 
 const DomainAndFactorPage = (props) => {
 
   const [checked, setChecked] = React.useState([]);
 
-  const [domainList,setDomainList] = React.useState(["Technology for older adults","Software Development","Health","Education","Finance"]);
+  const [domainList, setDomainList] = React.useState(["Technology for older adults", "Software Development", "Health", "Education", "Finance"]);
 
 
-  const [internalHumanFactor,setInternalHumanFactor] = React.useState ([
+  const [internalHumanFactor, setInternalHumanFactor] = React.useState([
     "Motivation",
     "Goal",
     "Concern/frustration/pain point",
@@ -32,7 +42,7 @@ const DomainAndFactorPage = (props) => {
     "Occupation"
   ]);
 
-  const [externalHumanFactor,setExternalHumanFactor] = React.useState([
+  const [externalHumanFactor, setExternalHumanFactor] = React.useState([
     "Name",
     "Age",
     "Gender",
@@ -46,13 +56,13 @@ const DomainAndFactorPage = (props) => {
     "Privacy"
   ]);
 
-   const [selectedExHF,setSelectedExHF] = React.useState([]);
-   const [selectedInHF,setSelectedInHF] = React.useState([]);
-   const [extraDetails,setExtraDetails] = React.useState("");
+  const [selectedExHF, setSelectedExHF] = React.useState([]);
+  const [selectedInHF, setSelectedInHF] = React.useState([]);
+  const [extraDetails, setExtraDetails] = React.useState("");
 
 
 
-  
+
 
 
 
@@ -67,7 +77,7 @@ const DomainAndFactorPage = (props) => {
     }
 
     setChecked(newChecked);
-    
+
   };
 
 
@@ -82,7 +92,7 @@ const DomainAndFactorPage = (props) => {
     }
 
     setSelectedExHF(newChecked);
-    
+
   };
 
   const handleInHFToggle = (value) => () => {
@@ -96,22 +106,22 @@ const DomainAndFactorPage = (props) => {
     }
 
     setSelectedInHF(newChecked);
-    
+
   };
 
 
 
-  const addNewDomain = (newDomain) =>{
-    setDomainList([newDomain,...domainList]);
+  const addNewDomain = (newDomain) => {
+    setDomainList([newDomain, ...domainList]);
   };
 
 
-  const addNewInHumanFactor = (newInHF) =>{
-    setInternalHumanFactor([newInHF,...internalHumanFactor]);
+  const addNewInHumanFactor = (newInHF) => {
+    setInternalHumanFactor([newInHF, ...internalHumanFactor]);
   };
 
-  const addNewExternalHumanFactor = (newExHF) =>{
-    setExternalHumanFactor([newExHF,...externalHumanFactor]);
+  const addNewExternalHumanFactor = (newExHF) => {
+    setExternalHumanFactor([newExHF, ...externalHumanFactor]);
   };
 
   React.useEffect(() => {
@@ -124,101 +134,89 @@ const DomainAndFactorPage = (props) => {
     if (storedSelectedExHF) setSelectedExHF(JSON.parse(storedSelectedExHF));
     if (storedSelectedInHF) setSelectedInHF(JSON.parse(storedSelectedInHF));
     if (storedExtraDetails) setExtraDetails(storedExtraDetails);
-}, []);
+  }, []);
 
   React.useEffect(() => {
-      localStorage.setItem('checked', JSON.stringify(checked));
-      localStorage.setItem('selectedExHF', JSON.stringify(selectedExHF));
-      localStorage.setItem('selectedInHF', JSON.stringify(selectedInHF));
-      localStorage.setItem('extraDetails', extraDetails);
-    }, [checked, selectedExHF, selectedInHF, extraDetails]);
+    localStorage.setItem('checked', JSON.stringify(checked));
+    localStorage.setItem('selectedExHF', JSON.stringify(selectedExHF));
+    localStorage.setItem('selectedInHF', JSON.stringify(selectedInHF));
+    localStorage.setItem('extraDetails', extraDetails);
+  }, [checked, selectedExHF, selectedInHF, extraDetails]);
 
 
 
 
-  console.log (checked);
-  console.log (selectedExHF);
-  console.log (selectedInHF);
-  console.log (extraDetails);
+  console.log(checked);
+  console.log(selectedExHF);
+  console.log(selectedInHF);
+  console.log(extraDetails);
 
-    return (
-      <div style={{ overflow: 'hidden' }}>
-        <Header />
-  <Container maxWidth="xl">
-    <Grid container direction="column" justifyContent="space-between" alignItems="stretch">
+  return (
+    <>
+      <Header></Header>
+      <Box sx={{ m: 2 }} >
+        <Box display="flex" flexDirection="column" justifyContent="space-between" height="100%">
 
-      <Grid item container sx={{ m: 3 }}>
-        <Grid container spacing={2}>
-          <Grid item xs={8} >
+          <Box display="flex" justifyContent="space-between" p={2}>
             <Typography variant="h5" sx={{ fontWeight: 'bold' }}>Select Domain</Typography>
-          </Grid>
-          <Grid item xs={4} container justifyContent="flex-end">
             <NewDomainDialog addNewDomain={addNewDomain} />
-          </Grid>
-        </Grid>
-      </Grid>
+          </Box>
 
-      <MultipleSelectableList itemList={domainList} selectedItems={checked} handleToggle={handleToggle}   />
+          <Box p={2}>
+            <MultipleSelectableList itemList={domainList} selectedItems={checked} handleToggle={handleToggle} />
+          </Box>
 
-      <Grid item container sx={{ m: 3 }}>
-        <Grid container spacing={2}>
-          <Grid item xs={8}>
-            <Typography variant="h5" sx={{ fontWeight: 'bold' }}>Select Human Factor ( External )</Typography>
-          </Grid>
-          <Grid item xs={4} container justifyContent="flex-end">
+          <Box display="flex" justifyContent="space-between" p={2}>
+            <Typography variant="h5" sx={{ fontWeight: 'bold', fontSize: { xs: '1rem', md: '1.25rem' } }}>Select Human Factor ( External )</Typography>
             <AddNewExternalHumanFactor addNewExternalHumanFactor={addNewExternalHumanFactor} />
-          </Grid>
-        </Grid>
-      </Grid>
+          </Box>
 
-      <MultipleSelectableList itemList={externalHumanFactor} selectedItems={selectedExHF} handleToggle={handleExHFToggle} />
+          <Box p={2}>
+            <MultipleSelectableList itemList={externalHumanFactor} selectedItems={selectedExHF} handleToggle={handleExHFToggle} />
+          </Box>
 
-      <Grid item container sx={{ m: 3 }}>
-        <Grid container spacing={2}>
-          <Grid item xs={8}>
-            <Typography variant="h5" sx={{ fontWeight: 'bold' }}>Select Human Factor ( Internal )</Typography>
-          </Grid>
-          <Grid item xs={4} container justifyContent="flex-end">
+          <Box display="flex" justifyContent="space-between" p={2}>
+            <Typography variant="h5" sx={{ fontWeight: 'bold', fontSize: { xs: '1rem', md: '1.25rem' } }}>Select Human Factor ( Internal )</Typography>
             <AddNewInternalHumanFactor addNewInHumanFactor={addNewInHumanFactor} />
-          </Grid>
-        </Grid>
-      </Grid>
+          </Box>
 
-      <MultipleSelectableList itemList={internalHumanFactor} selectedItems={selectedInHF} handleToggle={handleInHFToggle}/>
+          <Box p={2}>
+            <MultipleSelectableList itemList={internalHumanFactor} selectedItems={selectedInHF} handleToggle={handleInHFToggle} />
+          </Box>
 
-      <Grid item container sx={{ m: 3 }}>
-        <Typography variant="h5" sx={{ fontWeight: 'bold' }}>Specify any details you want to focus on</Typography>
-      </Grid>
-      <Grid item container sx={{ m: 3 }}>
-          <TextField 
-            fullWidth
-            label="Extra Details" 
-            id="fullWidth" 
-            multiline
-            rows={2}
-            placeholder="Example: I want to set the age as 68 years old; I want to set the gender as female;"
-            inputProps={{ style: {  padding: "10px" } }} 
-            onChange={(e) => { setExtraDetails(e.target.value) }}
-          />
-      </Grid>
+          <Box display="flex" flexDirection="column" p={2}>
+            <Typography variant="h5" sx={{ fontWeight: 'bold', fontSize: { xs: '1rem', md: '1.25rem' } }}>Specify any details you want to focus on</Typography>
+
+            <textarea
+              style={textareaStyles}
+              id="fullWidth"
+              rows={2}
+              placeholder="Example: I want to set the age as 68 years old; I want to set the gender as female;"
+              onChange={(e) => { setExtraDetails(e.target.value) }}
+            ></textarea>
+
+          </Box>
+
+          <Box display="flex" justifyContent="center">
+            {selectedExHF.length > 0 && selectedInHF.length > 0 && checked.length > 0 && (
+              <div>
+                <Link to='/dimension'>
+                  <NextButton name="Next" />
+                </Link>
+              </div>
+            )}
+          </Box>
+
+        </Box>
 
 
-      <Grid item container justifyContent="center" >
-        {selectedExHF.length > 0 && selectedInHF.length > 0 && checked.length > 0 && (
-          <div>
-           <Link to='/dimension'>
-              <NextButton name = "Next"/>
-           </Link>
-            
-            
-          </div>
-        )}
-      </Grid>
-    </Grid>
+      </Box >
+    </>
 
-  </Container>
-</div>
-    );
+
+
+
+  );
 };
 
 export default DomainAndFactorPage;
