@@ -1,6 +1,4 @@
-import React, { useState } from "react";
-import { Grid, Container, Paper } from '@mui/material';
-//import "./Modal.css";
+import React from "react";
 import DividerText from "./DividerText";
 import Box from '@mui/material/Box';
 import Button from '@mui/material/Button';

@@ -1,10 +1,10 @@
 import PersonaContext from "./persona-context";
 
 const PersonaProvider = props => {
-    const addFactorHandler = item => {};
+    const addFactorHandler = item => { };
 
-    const removeFactorHandler = id => {};
-    
+    const removeFactorHandler = id => { };
+
     const personaContext = {
 
     }

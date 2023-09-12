@@ -1,7 +1,7 @@
 import React from 'react';
-import { Grid, Paper, List, ListItem, ListItemButton, ListItemIcon, ListItemText, Checkbox } from '@mui/material';
+import { Paper, List, ListItem, ListItemButton, ListItemIcon, ListItemText, Checkbox } from '@mui/material';
 
-const MultipleSelectableList = ({ itemList, selectedItems, handleToggle, singleSelect }) => {
+const MultipleSelectableList = ({ itemList, selectedItems, handleToggle }) => {
   return (
 
 

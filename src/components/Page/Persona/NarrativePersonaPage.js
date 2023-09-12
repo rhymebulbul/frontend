@@ -1,14 +1,12 @@
 import Header from '../../Layout/Header';
 import NextButton from '../../Layout/NextButton';
-import { Link } from 'react-router-dom';
-import avatar from './../../../images/avatar.png';
-import { Grid, Container, Paper } from '@mui/material';
+import { Grid, Container } from '@mui/material';
 import InfoCard from '../../Layout/InfoCard';
 import * as React from 'react';
 import html2canvas from 'html2canvas';
 import jsPDF from 'jspdf';
 import RegenerateModal from './RegenerateModal';
-import AddFactorModal from './AddFactorModal';
+
 
 
 const NarrativePersonaPage = (props) => {
