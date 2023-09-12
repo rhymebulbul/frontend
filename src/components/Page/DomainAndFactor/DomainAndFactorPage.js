@@ -125,10 +125,10 @@ const DomainAndFactorPage = (props) => {
   };
 
   React.useEffect(() => {
-    const storedChecked = localStorage.getItem('checked');
-    const storedSelectedExHF = localStorage.getItem('selectedExHF');
-    const storedSelectedInHF = localStorage.getItem('selectedInHF');
-    const storedExtraDetails = localStorage.getItem('extraDetails');
+    const storedChecked = sessionStorage.getItem('checked');
+    const storedSelectedExHF = sessionStorage.getItem('selectedExHF');
+    const storedSelectedInHF = sessionStorage.getItem('selectedInHF');
+    const storedExtraDetails = sessionStorage.getItem('extraDetails');
 
     if (storedChecked) setChecked(JSON.parse(storedChecked));
     if (storedSelectedExHF) setSelectedExHF(JSON.parse(storedSelectedExHF));
@@ -136,13 +136,13 @@ const DomainAndFactorPage = (props) => {
     if (storedExtraDetails) setExtraDetails(storedExtraDetails);
   }, []);
 
-  React.useEffect(() => {
-    localStorage.setItem('checked', JSON.stringify(checked));
-    localStorage.setItem('selectedExHF', JSON.stringify(selectedExHF));
-    localStorage.setItem('selectedInHF', JSON.stringify(selectedInHF));
-    localStorage.setItem('extraDetails', extraDetails);
-  }, [checked, selectedExHF, selectedInHF, extraDetails]);
 
+  React.useEffect(() => {
+    sessionStorage.setItem('checked', JSON.stringify(checked));
+    sessionStorage.setItem('selectedExHF', JSON.stringify(selectedExHF));
+    sessionStorage.setItem('selectedInHF', JSON.stringify(selectedInHF));
+    sessionStorage.setItem('extraDetails', extraDetails);
+  }, [checked, selectedExHF, selectedInHF, extraDetails]);
 
 
 

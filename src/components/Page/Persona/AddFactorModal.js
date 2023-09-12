@@ -1,9 +1,8 @@
 import React, { useState } from "react";
-import { Grid , Container, Paper, Divider} from '@mui/material';
+import { Grid, Container, Paper, Divider } from '@mui/material';
 //import "./Modal.css";
 import Header from "../../Layout/Header";
 import NextButton from "../../Layout/NextButton";
-
 import Box from '@mui/material/Box';
 import Button from '@mui/material/Button';
 import Typography from '@mui/material/Typography';
@@ -23,7 +22,7 @@ const style = {
   p: 4,
 };
 
-export default function AddFactorModal() {
+export default function AddFactorModal({ disabled }) {
   const [open, setOpen] = React.useState(false);
   const handleOpen = () => setOpen(true);
   const handleClose = () => setOpen(false);
@@ -31,7 +30,7 @@ export default function AddFactorModal() {
   return (
     <div>
       <Grid item xs={2} >
-                <NextButton name = {"Add Factors"} onClickCallback={handleOpen}/>
+        <NextButton name={"Add Factors"} onClickCallback={handleOpen} disabled={disabled} />
       </Grid>
       <Modal
         open={open}
@@ -45,22 +44,22 @@ export default function AddFactorModal() {
           </Typography>
           {/*Need TO link backend*/}
           <Box textAlign={'center'}>
-          <Button ali>Select Factor</Button>
+            <Button ali>Select Factor</Button>
           </Box>
           <Box textAlign={'Center'}>
-          <TextField
-          fullWidth 
-          type="text"
-          id="content"
-          label="Description"
-          variant="outlined"
-          inputProps={{
-          style: {
-            height: "400px",
-          },
-        }}
-      />
-          <Button>Add</Button>
+            <TextField
+              fullWidth
+              type="text"
+              id="content"
+              label="Description"
+              variant="outlined"
+              inputProps={{
+                style: {
+                  height: "400px",
+                },
+              }}
+            />
+            <Button>Add</Button>
           </Box>
         </Box>
       </Modal>
