@@ -28,7 +28,7 @@ const InfoCard = ({ title, content, editVisible, removeVisible, onDelete }) => {
   };
 
   return (
-    <Box sx={{ minWidth: 275 }}>
+    <Box sx={{ minWidth: 400 }}>
       <Card variant="outlined">
         <CardContent>
           <Typography sx={{ fontSize: 14 }} color="text.secondary" gutterBottom>
@@ -43,7 +43,7 @@ const InfoCard = ({ title, content, editVisible, removeVisible, onDelete }) => {
               onChange={handleTextChange}
             />
           ) : (
-            <Typography variant="body2" sx={{ lineHeight: 1.7, letterSpacing: 1, textAlign: 'justify' }}>{cardText}</Typography>
+            <Typography variant="body2" sx={{ lineHeight: 1.7, letterSpacing: 1, textAlign: 'justify', wordWrap: 'break-word' }}>{cardText}</Typography>
           )}
         </CardContent>
         <CardActions>

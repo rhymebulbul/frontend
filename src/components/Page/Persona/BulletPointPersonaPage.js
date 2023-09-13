@@ -1,6 +1,6 @@
 import Header from '../../Layout/Header';
 import NextButton from '../../Layout/NextButton';
-import { Grid, Container } from '@mui/material';
+import { Grid, Box, Container } from '@mui/material';
 import InfoCard from '../../Layout/InfoCard';
 import * as React from 'react';
 import RegenerateModal from './RegenerateModal'
@@ -32,8 +32,8 @@ const BulletPointPersonaPage = (props) => {
     return (
         <div>
             <Header />
-            <Container maxWidth="xl">
-                <Grid item container sx={{ m: 3 }}>
+            <Box width="100%" maxWidth="1200px" mx="auto" overflowX="hidden">
+                <Grid item container sx={{ m: 2, overflow: 'hidden' }}>
 
                     <Grid
                         container
@@ -64,23 +64,28 @@ const BulletPointPersonaPage = (props) => {
 
                     </Grid>
                 </Grid>
+            </Box>
 
-                <Grid container spacing={3} sx={{ m: 3 }}>
-                    {cards.map((card) => (
-                        <Grid item xs key={card.id}>
+            <Box width="100%" maxWidth="1200px" mx="auto" overflowX="hidden">
+                <Grid container spacing={1} sx={{ m: 3 }}>
+                    {cards.map((card, index) => (
+                        <Grid item xs key={index}>
                             <InfoCard
                                 title={card.title}
                                 content={card.content}
                                 editVisible={edit}
                                 removeVisible={edit}
-                                onDelete={() => handleDelete(card.id)}
+                                onDelete={() => handleDelete(index)}  // Pass the delete callback to InfoCard
                             />
                         </Grid>
                     ))}
                 </Grid>
+            </Box>
 
 
-            </Container>
+
+
+
         </div>
     );
 };
