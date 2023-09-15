@@ -19,7 +19,7 @@ import { useHttpClient } from "../../../shared/hooks/http-hook";
 const defaultTheme = createTheme();
 
 export default function SignIn() {
-  const [email, setEmail] = useState('');
+  const [username, setUsername] = useState('');
   const [password, setPassword] = useState('');
   const [openSnackbar, setOpenSnackbar] = useState(false);
   const { isLoading, error, sendRequest, clearError } = useHttpClient();
@@ -33,13 +33,15 @@ export default function SignIn() {
       const responseData = await sendRequest(
         "http://localhost:8081/api/auth/signin",
         "POST",
-        JSON.stringify({ email, password }),
+        JSON.stringify({ username, password }),
         {
           "Content-Type": "application/json",
         }
       );
+      console.log(responseData);
+      const token = responseData.headers.get('Authorization').split(' ')[1]; // 'Bearer TOKEN_VALUE'
 
-      auth.login(responseData.userId, responseData.token);
+      auth.login(responseData.userId, token);
       navigate('/'); // Navigate to the main page on successful login
     } catch (err) {
       setOpenSnackbar(true); // Show the Snackbar when there's an error
@@ -75,8 +77,8 @@ export default function SignIn() {
               name="email"
               autoComplete="email"
               autoFocus
-              value={email}
-              onChange={e => setEmail(e.target.value)}
+              value={username}
+              onChange={e => setUsername(e.target.value)}
             />
             <TextField
               margin="normal"

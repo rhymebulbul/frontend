@@ -7,7 +7,7 @@ import DialogContent from '@mui/material/DialogContent';
 import DialogContentText from '@mui/material/DialogContentText';
 import DialogTitle from '@mui/material/DialogTitle';
 
-const NewDomainDialog = ({addNewDomain}) => {
+const NewDomainDialog = ({ addNewDomain }) => {
   const [open, setOpen] = React.useState(false);
   const [newDomainName, setNewDomainName] = React.useState(""); // New state variable
 
@@ -20,8 +20,14 @@ const NewDomainDialog = ({addNewDomain}) => {
     setOpen(false);
   };
 
-  const handleAddNewDomain = () =>{
-    console.log (newDomainName);
+  const handleAddNewDomain = () => {
+    // Check if newDomainName is empty or just whitespace
+    if (newDomainName.trim() === '') {
+      alert("Domain name cannot be empty!");
+      return;
+    }
+
+    console.log(newDomainName);
     addNewDomain(newDomainName);
     handleClose();
   };

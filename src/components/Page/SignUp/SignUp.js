@@ -21,9 +21,8 @@ const defaultTheme = createTheme();
 
 
 export default function SignUp() {
-  const [email, setEmail] = React.useState('');
   const [password, setPassword] = React.useState('');
-  const [name,setName] = React.useState('');
+  const [username, setUsername] = React.useState('');
   const [openSnackbar, setOpenSnackbar] = React.useState(false);
   const { isLoading, error, sendRequest, clearError } = useHttpClient();
   const auth = React.useContext(AuthContext);
@@ -31,23 +30,23 @@ export default function SignUp() {
   const [snackbarMessage, setSnackbarMessage] = React.useState('');
 
 
-   const handleSubmit = async (event) => {
+  const handleSubmit = async (event) => {
     event.preventDefault();
 
     try {
       const responseData = await sendRequest(
         "http://localhost:8081/api/auth/signup",
-          "POST",
-        JSON.stringify({ email, name, password }),
+        "POST",
+        JSON.stringify({ username, password }),
         {
           "Content-Type": "application/json",
         }
       );
 
       auth.login(responseData.userId, responseData.token);
-      navigate('/'); // Navigate to the main page on successful login
+      navigate('/SignIn'); // Navigate to the main page on successful login
     } catch (err) {
-         if (err.message.includes('Failed! Username is already in use!')) {  // Check the error message
+      if (err.message.includes('Failed! Username is already in use!')) {  // Check the error message
         setSnackbarMessage('Email already exists. Please try another.');
       } else {
         setSnackbarMessage('An error occurred. Please try again.');
@@ -58,9 +57,9 @@ export default function SignUp() {
 
   return (
     <ThemeProvider theme={defaultTheme}>
-        <Header/>
+      <Header />
       <Container component="main" maxWidth="xs">
-        
+
         <CssBaseline />
         <Box
           sx={{
@@ -84,7 +83,7 @@ export default function SignUp() {
                   label="Email Address"
                   name="email"
                   autoComplete="email"
-                  onChange={e => setEmail(e.target.value)}
+                  onChange={e => setUsername(e.target.value)}
                 />
               </Grid>
               <Grid item xs={12}>
@@ -111,7 +110,7 @@ export default function SignUp() {
             </Button>
             <Grid container justifyContent="flex-end">
               <Grid item>
-                <Link href = '/signin' variant="body2">
+                <Link href='/signin' variant="body2">
                   Already have an account? Sign in
                 </Link>
               </Grid>
@@ -121,17 +120,17 @@ export default function SignUp() {
 
       </Container>
       <Snackbar
-                open={openSnackbar}
-                autoHideDuration={6000}
-                onClose={() => setOpenSnackbar(false)}
-                message={snackbarMessage}
-                action={
-                    <React.Fragment>
-                    <Button color="secondary" size="small" onClick={() => setOpenSnackbar(false)}>
-                        Close
-                    </Button>
-                    </React.Fragment>
-                }>
+        open={openSnackbar}
+        autoHideDuration={6000}
+        onClose={() => setOpenSnackbar(false)}
+        message={snackbarMessage}
+        action={
+          <React.Fragment>
+            <Button color="secondary" size="small" onClick={() => setOpenSnackbar(false)}>
+              Close
+            </Button>
+          </React.Fragment>
+        }>
 
       </Snackbar>
     </ThemeProvider>

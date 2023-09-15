@@ -7,7 +7,7 @@ import DialogContent from '@mui/material/DialogContent';
 import DialogContentText from '@mui/material/DialogContentText';
 import DialogTitle from '@mui/material/DialogTitle';
 
-const AddNewExternalHumanFactor = ({addNewExternalHumanFactor}) => {
+const AddNewExternalHumanFactor = ({ addNewExternalHumanFactor }) => {
   const [open, setOpen] = React.useState(false);
   const [newExHF, setNewExHF] = React.useState(""); // New state variable
 
@@ -20,9 +20,9 @@ const AddNewExternalHumanFactor = ({addNewExternalHumanFactor}) => {
     setOpen(false);
   };
 
-  const handleAddNewExHF = () =>{
-    console.log (newExHF);
-    addNewExternalHumanFactor (newExHF);
+  const handleAddNewExHF = () => {
+    console.log(newExHF);
+    addNewExternalHumanFactor(newExHF);
     handleClose();
   };
 
@@ -47,7 +47,7 @@ const AddNewExternalHumanFactor = ({addNewExternalHumanFactor}) => {
             fullWidth
             variant="standard"
             value={newExHF} // Make the input controlled
-            onChange={(e) => setNewExHF(e.target.value)} 
+            onChange={(e) => setNewExHF(e.target.value)}
           />
         </DialogContent>
         <DialogActions>

@@ -9,7 +9,7 @@ export const useHttpClient = () => {
       setIsLoading(true);
       try {
         // await new Promise((resolve) => setTimeout(resolve, 2000));
-        
+
         const response = await fetch(url, {
           method,
           body,
@@ -23,7 +23,12 @@ export const useHttpClient = () => {
         }
 
         setIsLoading(false);
-        return responseData;
+
+        // Return both the response data and the headers
+        return {
+          data: responseData,
+          headers: response.headers
+        };
       } catch (err) {
         setError(err.message);
         setIsLoading(false);

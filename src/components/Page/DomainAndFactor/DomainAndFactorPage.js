@@ -7,7 +7,7 @@ import AddNewInternalHumanFactor from './AddNewInternalHumanFactor';
 import MultipleSelectableList from '../../Layout/MultipleSelectableList';
 import NextButton from '../../Layout/NextButton';
 import { Link } from 'react-router-dom';
-
+import DeleteItemsDialog from './DeleteItemsDialog';
 const textareaStyles = {
   width: '100%',
   padding: '20px 0 6px 0',
@@ -24,10 +24,10 @@ const DomainAndFactorPage = (props) => {
 
   const [checked, setChecked] = React.useState([]);
 
-  const [domainList, setDomainList] = React.useState(["Technology for older adults", "Software Development", "Health", "Education", "Finance"]);
+  const defaultDomainList = ["Technology for older adults", "Software Development", "Health", "Education", "Finance"];
 
 
-  const [internalHumanFactor, setInternalHumanFactor] = React.useState([
+  const defaultInternalHumanFactor = [
     "Motivation",
     "Goal",
     "Concern/frustration/pain point",
@@ -40,9 +40,9 @@ const DomainAndFactorPage = (props) => {
     "Family structure",
     "Living arrangement",
     "Occupation"
-  ]);
+  ];
 
-  const [externalHumanFactor, setExternalHumanFactor] = React.useState([
+  const defaultExternalHumanFactor = [
     "Name",
     "Age",
     "Gender",
@@ -54,7 +54,21 @@ const DomainAndFactorPage = (props) => {
     "Activity",
     "Personality/personal attribute",
     "Privacy"
-  ]);
+  ];
+
+  const [addedDomainList, setAddedDomainList] = React.useState([]);
+  const [addedInternalHumanFactor, setAddedInternalHumanFactor] = React.useState([]);
+  const [addedExternalHumanFactor, setAddedExternalHumanFactor] = React.useState([]);
+
+
+  const domainList = [...defaultDomainList, ...addedDomainList];
+  const internalHumanFactor = [...defaultInternalHumanFactor, ...addedInternalHumanFactor];
+  const externalHumanFactor = [...defaultExternalHumanFactor, ...addedExternalHumanFactor];
+
+
+
+
+
 
   const [selectedExHF, setSelectedExHF] = React.useState([]);
   const [selectedInHF, setSelectedInHF] = React.useState([]);
@@ -112,16 +126,18 @@ const DomainAndFactorPage = (props) => {
 
 
   const addNewDomain = (newDomain) => {
-    setDomainList([newDomain, ...domainList]);
+    setAddedDomainList(prevDomains => [newDomain, ...prevDomains]);
   };
 
 
   const addNewInHumanFactor = (newInHF) => {
-    setInternalHumanFactor([newInHF, ...internalHumanFactor]);
+    setAddedInternalHumanFactor(prevFactors => [newInHF, ...prevFactors]);
+
   };
 
   const addNewExternalHumanFactor = (newExHF) => {
-    setExternalHumanFactor([newExHF, ...externalHumanFactor]);
+    setAddedExternalHumanFactor(prevFactors => [newExHF, ...prevFactors]);
+
   };
 
   React.useEffect(() => {
@@ -158,8 +174,14 @@ const DomainAndFactorPage = (props) => {
         <Box display="flex" flexDirection="column" justifyContent="space-between" height="100%">
 
           <Box display="flex" justifyContent="space-between" p={2}>
-            <Typography variant="h5" sx={{ fontWeight: 'bold' }}>Select Domain</Typography>
-            <NewDomainDialog addNewDomain={addNewDomain} />
+            <Typography variant="h5" sx={{ fontWeight: 'bold', flexGrow: 1 }}>Select Domain</Typography>
+            <Box display="flex" >
+              <Box mr={2}>
+                <NewDomainDialog addNewDomain={addNewDomain} />
+              </Box>
+              <DeleteItemsDialog title="Delete Domains"
+                items={addedDomainList} />
+            </Box>
           </Box>
 
           <Box p={2}>
