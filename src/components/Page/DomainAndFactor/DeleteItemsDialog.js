@@ -18,11 +18,19 @@ const BootstrapDialog = styled(Dialog)(({ theme }) => ({
     },
 }));
 
-export default function DeleteItemsDialog({ title, items, onItemsDeleted }) {
+export default function DeleteItemsDialog({ title, items, onItemsDeleted, apiEndpoint, fetchData, varName }) {
     const [open, setOpen] = React.useState(false);
     const [currentItems, setCurrentItems] = React.useState(items); // Items list
     const [itemsToDelete, setItemsToDelete] = React.useState([]); // Items to delete
+    const storedData = JSON.parse(localStorage.getItem('userData'));
+    const token = storedData && storedData.token;
 
+
+    React.useEffect(() => {
+        setCurrentItems(items);
+    }, [items]);
+
+    console.log(currentItems);
     const handleClickOpen = () => {
         setOpen(true);
     };
@@ -38,27 +46,65 @@ export default function DeleteItemsDialog({ title, items, onItemsDeleted }) {
         }
     };
 
+    async function deleteItem(itemToDelete) {
+        try {
+            const response = await fetch(
+                apiEndpoint,
+                {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json',
+                        'Authorization': `Bearer ${token}` // You'll need a way to access the token
+                    },
+                    body: JSON.stringify({ [varName]: itemToDelete })
+                }
+            );
+
+            if (response.ok) {
+                console.log("Item deleted successfully");
+                fetchData(); // Refresh data
+            } else {
+                console.error("Error deleting item:", await response.text());
+            }
+
+        } catch (error) {
+            console.error("There was an error deleting the item:", error);
+        }
+    }
+
+
     const handleSaveChanges = () => {
+        // For every item to delete, call deleteItem
+        itemsToDelete.forEach(item => {
+            deleteItem(item);
+        });
+
         const remainingItems = currentItems.filter((item) => !itemsToDelete.includes(item));
         setCurrentItems(remainingItems);
         onItemsDeleted && onItemsDeleted(remainingItems); // Inform parent
-        setItemsToDelete([]); // Clear the list
         handleClose();
+        setItemsToDelete([]); // Clear the list
+
     };
+
 
     return (
         <div>
             <Button variant="outlined" onClick={handleClickOpen}>
-                Delete Items
+                Delete Added {title}
             </Button>
             <BootstrapDialog
                 onClose={handleClose}
                 aria-labelledby="customized-dialog-title"
                 open={open}
             >
-                <DialogTitle sx={{ m: 0, p: 2 }} id="customized-dialog-title">
+                <DialogTitle
+                    sx={{ m: 0, p: 2, paddingRight: '100px' }}
+                    id="customized-dialog-title"
+                >
                     {title || "Delete Items"}
                 </DialogTitle>
+
                 <IconButton
                     aria-label="close"
                     onClick={handleClose}
@@ -71,23 +117,28 @@ export default function DeleteItemsDialog({ title, items, onItemsDeleted }) {
                 >
                     <CloseIcon />
                 </IconButton>
-                <DialogContent dividers>
-                    {currentItems.map((item, index) => (
-                        <Chip
-                            key={index}
-                            label={item}
-                            onDelete={() => handleMarkForDeletion(item)}
-                            color={itemsToDelete.includes(item) ? "primary" : "default"}
-                            style={{ marginRight: '8px', marginBottom: '8px' }}
-                        />
-                    ))}
+
+                <DialogContent dividers style={{ display: 'flex', justifyContent: 'center', alignItems: 'center' }}>
+                    {currentItems.length === 0 ? (
+                        <p style={{ textAlign: 'center' }}>No manually added {title}</p>
+                    ) : (
+                        currentItems.map((item, index) => (
+                            <Chip
+                                key={index}
+                                label={item}
+                                onDelete={() => handleMarkForDeletion(item)}
+                                color={itemsToDelete.includes(item) ? "primary" : "default"}
+                                style={{ marginRight: '8px', marginBottom: '8px' }}
+                            />
+                        ))
+                    )}
                 </DialogContent>
                 <DialogActions>
-                    <Button autoFocus onClick={handleSaveChanges}>
+                    <Button autoFocus onClick={handleSaveChanges} disabled={itemsToDelete.length === 0} >
                         Save changes
                     </Button>
                 </DialogActions>
             </BootstrapDialog>
-        </div>
+        </div >
     );
 }

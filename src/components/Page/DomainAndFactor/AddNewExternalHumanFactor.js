@@ -6,10 +6,37 @@ import DialogActions from '@mui/material/DialogActions';
 import DialogContent from '@mui/material/DialogContent';
 import DialogContentText from '@mui/material/DialogContentText';
 import DialogTitle from '@mui/material/DialogTitle';
-
-const AddNewExternalHumanFactor = ({ addNewExternalHumanFactor }) => {
+import axios from 'axios';
+const AddNewExternalHumanFactor = ({ onExternalFactorAdded }) => {
   const [open, setOpen] = React.useState(false);
   const [newExHF, setNewExHF] = React.useState(""); // New state variable
+
+
+  const addExternalHumanFactor = async (factorName) => {
+    try {
+      // Assuming you're storing the token in localStorage after user logs in.
+      const storedData = JSON.parse(localStorage.getItem('userData'));
+      const token = storedData && storedData.token;
+
+      const response = await axios.post(
+        'http://localhost:8081/api/user/addExternalFactor',
+        { factorName },
+        {
+          headers: {
+            'Content-Type': 'application/json',
+            'Authorization': `Bearer ${token}` // Send token in Authorization header
+          }
+        }
+      );
+
+      // If the request is successful:
+      console.log(response.data);
+
+    } catch (error) {
+      console.error("There was an error adding the external human factor:", error);
+
+    }
+  }
 
   const handleClickOpen = () => {
     setNewExHF('')
@@ -21,9 +48,13 @@ const AddNewExternalHumanFactor = ({ addNewExternalHumanFactor }) => {
   };
 
   const handleAddNewExHF = () => {
-    console.log(newExHF);
-    addNewExternalHumanFactor(newExHF);
+    if (newExHF.trim() === '') {
+      alert("Internal human factor name cannot be empty!");
+      return;
+    }
+    addExternalHumanFactor(newExHF);
     handleClose();
+    onExternalFactorAdded(true);
   };
 
 

@@ -6,10 +6,37 @@ import DialogActions from '@mui/material/DialogActions';
 import DialogContent from '@mui/material/DialogContent';
 import DialogContentText from '@mui/material/DialogContentText';
 import DialogTitle from '@mui/material/DialogTitle';
-
-const NewDomainDialog = ({ addNewDomain }) => {
+import axios from 'axios';
+const NewDomainDialog = ({ onDomainAdded }) => {
   const [open, setOpen] = React.useState(false);
   const [newDomainName, setNewDomainName] = React.useState(""); // New state variable
+
+  const addDomain = async (domainName) => {
+    try {
+      // Assuming you're storing the token in localStorage after user logs in.
+      const storedData = JSON.parse(localStorage.getItem('userData'));
+      const token = storedData && storedData.token;
+
+      const response = await axios.post(
+        'http://localhost:8081/api/user/addDomain',
+        { domainName },
+        {
+          headers: {
+            'Content-Type': 'application/json',
+            'Authorization': `Bearer ${token}` // Send token in Authorization header
+          }
+        }
+      );
+
+      // If the request is successful:
+      console.log(response.data);
+
+    } catch (error) {
+      console.error("There was an error adding the domain:", error);
+
+    }
+  }
+
 
   const handleClickOpen = () => {
     setNewDomainName('')
@@ -26,10 +53,10 @@ const NewDomainDialog = ({ addNewDomain }) => {
       alert("Domain name cannot be empty!");
       return;
     }
-
-    console.log(newDomainName);
-    addNewDomain(newDomainName);
+    addDomain(newDomainName);
     handleClose();
+
+    onDomainAdded(true);
   };
 
 

@@ -21,13 +21,16 @@ const textareaStyles = {
 
 
 
-const DomainAndFactorPage = (props) => {
+const DomainAndFactorPage = () => {
+  const storedData = JSON.parse(localStorage.getItem('userData'));
+  const token = storedData && storedData.token;
 
   const [selectedDomains, setSelectedDomains] = React.useState([]);
 
 
   // get the default domain list from db
   const [defaultDomainList, setDefaultDomainList] = React.useState([]);
+
   React.useEffect(() => {
     fetch("http://localhost:8081/api/domain/all")
       .then(res => res.json())
@@ -78,15 +81,103 @@ const DomainAndFactorPage = (props) => {
   }, []);
 
 
-
+  // Get users added domain from db
   const [addedDomainList, setAddedDomainList] = React.useState([]);
+
+  const fetchUserDomains = async () => {
+    try {
+
+      const response = await fetch(
+        'http://localhost:8081/api/user/getDomains',
+        {
+          headers: {
+            'Authorization': `Bearer ${token}` // Send token in Authorization header
+          }
+        }
+      );
+
+      const data = await response.json();
+      if (data && Array.isArray(data)) {
+        const domainNames = data.map(domainObj => domainObj.domainName); // Extract domainName from each object
+        setAddedDomainList(domainNames);
+      }
+
+    } catch (error) {
+      console.error("There was an error fetching the user domains:", error);
+    }
+  }
+
+
+  // Get users added internal human factors from db
+
   const [addedInternalHumanFactor, setAddedInternalHumanFactor] = React.useState([]);
+
+  const fetchUserInternalFactors = async () => {
+    try {
+
+      const response = await fetch(
+        'http://localhost:8081/api/user/getInternalFactors',
+        {
+          headers: {
+            'Authorization': `Bearer ${token}` // Send token in Authorization header
+          }
+        }
+      );
+
+      const data = await response.json();
+      if (data && Array.isArray(data)) {
+        const factorNames = data.map(factorObj => factorObj.factorName); // Extract factorName from each object
+        setAddedInternalHumanFactor(factorNames);
+      }
+
+    } catch (error) {
+      console.error("There was an error fetching the user internal human factor:", error);
+    }
+  }
+
+
+
+  // Get users added external human factors from db
   const [addedExternalHumanFactor, setAddedExternalHumanFactor] = React.useState([]);
 
+  const fetchUserExternalFactors = async () => {
+    try {
 
-  const domainList = [...defaultDomainList, ...addedDomainList];
-  const internalHumanFactor = [...defaultInternalHumanFactor, ...addedInternalHumanFactor];
-  const externalHumanFactor = [...defaultExternalHumanFactor, ...addedExternalHumanFactor];
+      const response = await fetch(
+        'http://localhost:8081/api/user/getExternalFactors',
+        {
+          headers: {
+            'Authorization': `Bearer ${token}` // Send token in Authorization header
+          }
+        }
+      );
+
+      const data = await response.json();
+      if (data && Array.isArray(data)) {
+        const factorNames = data.map(factorObj => factorObj.factorName); // Extract factorName from each object
+        setAddedExternalHumanFactor(factorNames);
+      }
+
+    } catch (error) {
+      console.error("There was an error fetching the user external human factor:", error);
+    }
+  }
+
+
+  React.useEffect(() => {
+    fetchUserDomains();
+    fetchUserInternalFactors();
+    fetchUserExternalFactors();
+  }, []);
+
+
+
+
+
+
+  const domainList = [...addedDomainList, ...defaultDomainList];
+  const internalHumanFactor = [...addedInternalHumanFactor, ...defaultInternalHumanFactor];
+  const externalHumanFactor = [...addedExternalHumanFactor, ...defaultExternalHumanFactor];
 
 
 
@@ -139,22 +230,57 @@ const DomainAndFactorPage = (props) => {
 
   };
 
+  const [domainAdded, setDomainAdded] = React.useState(false);
+  const [internalFactorAdded, setInternalFactorAdded] = React.useState(false);
+  const [externalFactorAdded, setExternalFactorAdded] = React.useState(false);
 
 
-  const addNewDomain = (newDomain) => {
-    setAddedDomainList(prevDomains => [newDomain, ...prevDomains]);
-  };
+  React.useEffect(() => {
+    if (domainAdded) {
+      fetchUserDomains();
+      // Reset the domainAdded state after fetching, if necessary.
+      setDomainAdded(false);
+    }
+  }, [domainAdded]);
+
+  const handleDomainAdded = (isAdded) => {
+    if (isAdded) {
+      setDomainAdded(true);
+    }
+  }
 
 
-  const addNewInHumanFactor = (newInHF) => {
-    setAddedInternalHumanFactor(prevFactors => [newInHF, ...prevFactors]);
+  React.useEffect(() => {
+    if (internalFactorAdded) {
+      fetchUserInternalFactors();
+      // Reset the domainAdded state after fetching, if necessary.
+      setInternalFactorAdded(false);
+    }
+  }, [internalFactorAdded]);
 
-  };
 
-  const addNewExternalHumanFactor = (newExHF) => {
-    setAddedExternalHumanFactor(prevFactors => [newExHF, ...prevFactors]);
 
-  };
+  const handleInHFAdded = (isAdded) => {
+    if (isAdded) {
+      setInternalFactorAdded(true);
+    }
+  }
+
+  React.useEffect(() => {
+    if (externalFactorAdded) {
+      fetchUserExternalFactors();
+
+      setExternalFactorAdded(false);
+    }
+  }, [externalFactorAdded]);
+
+
+  const handleExHFAdded = (isAdded) => {
+    if (isAdded) {
+      setExternalFactorAdded(true);
+    }
+  }
+
 
   React.useEffect(() => {
     const storedselectedDomains = sessionStorage.getItem('selectedDomains');
@@ -193,10 +319,16 @@ const DomainAndFactorPage = (props) => {
             <Typography variant="h5" sx={{ fontWeight: 'bold', flexGrow: 1 }}>Select Domain</Typography>
             <Box display="flex" >
               <Box mr={2}>
-                <NewDomainDialog addNewDomain={addNewDomain} />
+                <NewDomainDialog onDomainAdded={handleDomainAdded} />
               </Box>
-              <DeleteItemsDialog title="Delete Domains"
-                items={addedDomainList} />
+              <DeleteItemsDialog
+                title="Domains"
+                items={addedDomainList}
+                onItemsDeleted={setAddedDomainList}
+                apiEndpoint="http://localhost:8081/api/user/deleteDomain"
+                fetchData={fetchUserDomains}
+                varName="domainName"
+              />
             </Box>
           </Box>
 
@@ -205,22 +337,48 @@ const DomainAndFactorPage = (props) => {
           </Box>
 
           <Box display="flex" justifyContent="space-between" p={2}>
+            <Typography variant="h5" sx={{ fontWeight: 'bold', fontSize: { xs: '1rem', md: '1.25rem' } }}>Select Human Factor ( Internal )</Typography>
+            <Box display="flex" >
+              <Box mr={2}>
+                <AddNewInternalHumanFactor onInternalFactorAdded={handleInHFAdded} />
+              </Box>
+              <DeleteItemsDialog
+                title="Internal Factors"
+                items={addedInternalHumanFactor}
+                onItemsDeleted={setAddedInternalHumanFactor}
+                apiEndpoint="http://localhost:8081/api/user/deleteInternalFactor"
+                fetchData={fetchUserInternalFactors}
+                varName="factorName"
+              />
+            </Box>
+          </Box>
+
+          <Box p={2}>
+            <MultipleSelectableList itemList={internalHumanFactor} selectedItems={selectedInHF} handleToggle={handleInHFToggle} />
+          </Box>
+
+          <Box display="flex" justifyContent="space-between" p={2}>
             <Typography variant="h5" sx={{ fontWeight: 'bold', fontSize: { xs: '1rem', md: '1.25rem' } }}>Select Human Factor ( External )</Typography>
-            <AddNewExternalHumanFactor addNewExternalHumanFactor={addNewExternalHumanFactor} />
+            <Box display="flex" >
+              <Box mr={2}>
+                <AddNewExternalHumanFactor onExternalFactorAdded={handleExHFAdded} />
+              </Box>
+              <DeleteItemsDialog
+                title="External Factors"
+                items={addedExternalHumanFactor}
+                onItemsDeleted={setAddedExternalHumanFactor}
+                apiEndpoint="http://localhost:8081/api/user/deleteExternalFactor"
+                fetchData={fetchUserExternalFactors}
+                varName="factorName"
+              />
+            </Box>
           </Box>
 
           <Box p={2}>
             <MultipleSelectableList itemList={externalHumanFactor} selectedItems={selectedExHF} handleToggle={handleExHFToggle} />
           </Box>
 
-          <Box display="flex" justifyContent="space-between" p={2}>
-            <Typography variant="h5" sx={{ fontWeight: 'bold', fontSize: { xs: '1rem', md: '1.25rem' } }}>Select Human Factor ( Internal )</Typography>
-            <AddNewInternalHumanFactor addNewInHumanFactor={addNewInHumanFactor} />
-          </Box>
 
-          <Box p={2}>
-            <MultipleSelectableList itemList={internalHumanFactor} selectedItems={selectedInHF} handleToggle={handleInHFToggle} />
-          </Box>
 
           <Box display="flex" flexDirection="column" p={2}>
             <Typography variant="h5" sx={{ fontWeight: 'bold', fontSize: { xs: '1rem', md: '1.25rem' } }}>Specify any details you want to focus on</Typography>
