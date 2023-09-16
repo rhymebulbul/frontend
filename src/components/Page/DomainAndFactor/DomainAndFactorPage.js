@@ -20,41 +20,64 @@ const textareaStyles = {
 };
 
 
+
 const DomainAndFactorPage = (props) => {
 
-  const [checked, setChecked] = React.useState([]);
-
-  const defaultDomainList = ["Technology for older adults", "Software Development", "Health", "Education", "Finance"];
+  const [selectedDomains, setSelectedDomains] = React.useState([]);
 
 
-  const defaultInternalHumanFactor = [
-    "Motivation",
-    "Goal",
-    "Concern/frustration/pain point",
-    "Language",
-    "Comfort with technology",
-    "Location",
-    "Skill",
-    "Behaviour",
-    "Life experience",
-    "Family structure",
-    "Living arrangement",
-    "Occupation"
-  ];
+  // get the default domain list from db
+  const [defaultDomainList, setDefaultDomainList] = React.useState([]);
+  React.useEffect(() => {
+    fetch("http://localhost:8081/api/domain/all")
+      .then(res => res.json())
+      .then(data => {
+        const domainArray = data.domains;
+        const domainNames = domainArray.map(domainObj => domainObj.domainName);
+        setDefaultDomainList(domainNames);
+        console.log("fetch domains successfully");
+      })
+      .catch(error => {
+        console.error("There was a problem fetching the domains:", error);
+      });
+  }, []);
 
-  const defaultExternalHumanFactor = [
-    "Name",
-    "Age",
-    "Gender",
-    "Interest",
-    "Education",
-    "Hobby",
-    "Habit",
-    "Emotion",
-    "Activity",
-    "Personality/personal attribute",
-    "Privacy"
-  ];
+
+
+  // get the default Internal human factor list from db
+  const [defaultInternalHumanFactor, setDefaultInternalHumanFactor] = React.useState([]);
+  React.useEffect(() => {
+    fetch("http://localhost:8081/api/factor/internal")
+      .then(res => res.json())
+      .then(data => {
+        const InternalFactorArray = data.factors;
+        const factorsNames = InternalFactorArray.map(factorObj => factorObj.factorName);
+        setDefaultInternalHumanFactor(factorsNames);
+        console.log("fetch internal human factors successfully");
+      })
+      .catch(error => {
+        console.error("There was a problem fetching the internal human factors:", error);
+      });
+  }, []);
+
+
+  // get the default External human factor list from db
+  const [defaultExternalHumanFactor, setDefaultExternalHumanFactor] = React.useState([]);
+  React.useEffect(() => {
+    fetch("http://localhost:8081/api/factor/external")
+      .then(res => res.json())
+      .then(data => {
+        const ExternalFactorArray = data.factors;
+        const factorsNames = ExternalFactorArray.map(factorObj => factorObj.factorName);
+        setDefaultExternalHumanFactor(factorsNames);
+        console.log("fetch external human factors successfully");
+      })
+      .catch(error => {
+        console.error("There was a problem fetching the internal human factors:", error);
+      });
+  }, []);
+
+
 
   const [addedDomainList, setAddedDomainList] = React.useState([]);
   const [addedInternalHumanFactor, setAddedInternalHumanFactor] = React.useState([]);
@@ -67,59 +90,52 @@ const DomainAndFactorPage = (props) => {
 
 
 
-
-
-
   const [selectedExHF, setSelectedExHF] = React.useState([]);
   const [selectedInHF, setSelectedInHF] = React.useState([]);
   const [extraDetails, setExtraDetails] = React.useState("");
 
 
 
-
-
-
-
   const handleToggle = (value) => () => {
-    const currentIndex = checked.indexOf(value);
-    const newChecked = [...checked];
+    const currentIndex = selectedDomains.indexOf(value);
+    const newselectedDomains = [...selectedDomains];
 
     if (currentIndex === -1) {
-      newChecked.push(value);
+      newselectedDomains.push(value);
     } else {
-      newChecked.splice(currentIndex, 1);
+      newselectedDomains.splice(currentIndex, 1);
     }
 
-    setChecked(newChecked);
+    setSelectedDomains(newselectedDomains);
 
   };
 
 
   const handleExHFToggle = (value) => () => {
     const currentIndex = selectedExHF.indexOf(value);
-    const newChecked = [...selectedExHF];
+    const newselectedDomains = [...selectedExHF];
 
     if (currentIndex === -1) {
-      newChecked.push(value);
+      newselectedDomains.push(value);
     } else {
-      newChecked.splice(currentIndex, 1);
+      newselectedDomains.splice(currentIndex, 1);
     }
 
-    setSelectedExHF(newChecked);
+    setSelectedExHF(newselectedDomains);
 
   };
 
   const handleInHFToggle = (value) => () => {
     const currentIndex = selectedInHF.indexOf(value);
-    const newChecked = [...selectedInHF];
+    const newselectedDomains = [...selectedInHF];
 
     if (currentIndex === -1) {
-      newChecked.push(value);
+      newselectedDomains.push(value);
     } else {
-      newChecked.splice(currentIndex, 1);
+      newselectedDomains.splice(currentIndex, 1);
     }
 
-    setSelectedInHF(newChecked);
+    setSelectedInHF(newselectedDomains);
 
   };
 
@@ -141,12 +157,12 @@ const DomainAndFactorPage = (props) => {
   };
 
   React.useEffect(() => {
-    const storedChecked = sessionStorage.getItem('checked');
+    const storedselectedDomains = sessionStorage.getItem('selectedDomains');
     const storedSelectedExHF = sessionStorage.getItem('selectedExHF');
     const storedSelectedInHF = sessionStorage.getItem('selectedInHF');
     const storedExtraDetails = sessionStorage.getItem('extraDetails');
 
-    if (storedChecked) setChecked(JSON.parse(storedChecked));
+    if (storedselectedDomains) setSelectedDomains(JSON.parse(storedselectedDomains));
     if (storedSelectedExHF) setSelectedExHF(JSON.parse(storedSelectedExHF));
     if (storedSelectedInHF) setSelectedInHF(JSON.parse(storedSelectedInHF));
     if (storedExtraDetails) setExtraDetails(storedExtraDetails);
@@ -154,15 +170,15 @@ const DomainAndFactorPage = (props) => {
 
 
   React.useEffect(() => {
-    sessionStorage.setItem('checked', JSON.stringify(checked));
+    sessionStorage.setItem('selectedDomains', JSON.stringify(selectedDomains));
     sessionStorage.setItem('selectedExHF', JSON.stringify(selectedExHF));
     sessionStorage.setItem('selectedInHF', JSON.stringify(selectedInHF));
     sessionStorage.setItem('extraDetails', extraDetails);
-  }, [checked, selectedExHF, selectedInHF, extraDetails]);
+  }, [selectedDomains, selectedExHF, selectedInHF, extraDetails]);
 
 
 
-  console.log(checked);
+  console.log(selectedDomains);
   console.log(selectedExHF);
   console.log(selectedInHF);
   console.log(extraDetails);
@@ -185,7 +201,7 @@ const DomainAndFactorPage = (props) => {
           </Box>
 
           <Box p={2}>
-            <MultipleSelectableList itemList={domainList} selectedItems={checked} handleToggle={handleToggle} />
+            <MultipleSelectableList itemList={domainList} selectedItems={selectedDomains} handleToggle={handleToggle} />
           </Box>
 
           <Box display="flex" justifyContent="space-between" p={2}>
@@ -220,7 +236,7 @@ const DomainAndFactorPage = (props) => {
           </Box>
 
           <Box display="flex" justifyContent="center">
-            {selectedExHF.length > 0 && selectedInHF.length > 0 && checked.length > 0 && (
+            {selectedExHF.length > 0 && selectedInHF.length > 0 && selectedDomains.length > 0 && (
               <div>
                 <Link to='/dimension'>
                   <NextButton name="Next" />
@@ -234,8 +250,6 @@ const DomainAndFactorPage = (props) => {
 
       </Box >
     </>
-
-
 
 
   );
