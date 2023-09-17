@@ -5,21 +5,107 @@ import InfoCard from '../../Layout/InfoCard';
 import * as React from 'react';
 import RegenerateModal from './RegenerateModal'
 import AddFactorModal from './AddFactorModal';
+import { CircularProgress } from '@mui/material';
 
 const BulletPointPersonaPage = (props) => {
 
     const [edit, setEdit] = React.useState(false);
 
-    const [cards, setCards] = React.useState([
-        { id: 1, title: 'testing', content: 'hi' },
-        { id: 2, title: 'testing', content: 'hi' },
-        { id: 3, title: 'testing', content: 'hihihihihihhihihihihihhihihihihihhihihihihihhihihihihihhihihihihihhihihihihihhihihihihihhihihihihihhihihihihih' },
-        { id: 4, title: 'testing', content: 'hi' },
-        { id: 5, title: 'testing', content: 'hi' }
-    ]);
+    const [selectedDomains, setSelectedDomains] = React.useState([]);
+    const [extraDetails, setExtraDetails] = React.useState('');
+    const [selectedExHF, setSelectedExHF] = React.useState([]);
+    const [selectedInHF, setSelectedInHF] = React.useState([]);
+    const [selectedPersonaLength, setSelectedPersonaLength] = React.useState('');
+
+    const [loading, setLoading] = React.useState(false);
+
+    const [dataLoaded, setDataLoaded] = React.useState(false);
+
+    const filterObjectByKeys = (obj, keys) => {
+        return keys.reduce((acc, key) => {
+            if (obj.hasOwnProperty(key)) {
+                acc[key] = obj[key];
+            }
+            return acc;
+        }, {});
+    };
+
+    React.useEffect(() => {
+        const fetchSessionData = () => {
+            setSelectedDomains(JSON.parse(sessionStorage.getItem('selectedDomains') || '[]'));
+            setExtraDetails(sessionStorage.getItem('extraDetails') || '');
+            setSelectedExHF(JSON.parse(sessionStorage.getItem('selectedExHF') || '[]'));
+            setSelectedInHF(JSON.parse(sessionStorage.getItem('selectedInHF') || '[]'));
+            setSelectedPersonaLength(sessionStorage.getItem('selectedPersonaLength') || '');
+
+            setDataLoaded(true);
+        };
+
+        fetchSessionData();
+    }, []);
+
+
+    const [persona, setPersona] = React.useState(null);
+
+    const [error, setError] = React.useState('');
+
+    const generatePersona = async (domains, internalFactors, externalFactors, extraDetails, length) => {
+        setLoading(true); // Start loading
+        const apiUrl = "http://localhost:8081/api/persona/generateStructuredPersona";
+        const domainsStr = domains.join(", ");
+        const internalFactorsStr = internalFactors.join(", ");
+        const externalFactorsStr = externalFactors.join(", ");
+        const bodyData = {
+            domains: domainsStr,
+            internalFactors: internalFactorsStr,
+            externalFactors: externalFactorsStr,
+            extraDetails,
+            length
+        };
+        try {
+            const response = await fetch(apiUrl, {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json'
+                },
+                body: JSON.stringify(bodyData)
+            });
+
+
+            if (!response.ok) {
+                const errorData = await response.json();
+                throw new Error(errorData.error);
+            }
+
+            const data = await response.json();
+            const fullPersona = JSON.parse(data.persona);
+            console.log(fullPersona);
+            const relevantKeys = [...selectedExHF, ...selectedInHF];
+            console.log(relevantKeys);
+            const filteredPersona = filterObjectByKeys(fullPersona, relevantKeys);
+            setPersona(filteredPersona);
+        } catch (err) {
+            console.error("Error:", err);
+            setError(err.message);
+        } finally {
+            setLoading(false); // Stop loading
+        }
+    };
+
+    React.useEffect(() => {
+        if (dataLoaded) {
+            const cleanedSelectedPersonaLength = selectedPersonaLength.replace(/^\"|\"$/g, '');
+            generatePersona(selectedDomains, selectedInHF, selectedExHF, extraDetails, cleanedSelectedPersonaLength);
+            console.log(persona);
+        }
+    }, [dataLoaded]);
+
+
+
+
 
     const handleDelete = (idToDelete) => {
-        setCards(prevCards => prevCards.filter(card => card.id !== idToDelete));
+
     }
 
 
@@ -32,7 +118,7 @@ const BulletPointPersonaPage = (props) => {
     return (
         <div>
             <Header />
-            <Box width="100%" maxWidth="1200px" mx="auto" overflowX="hidden">
+            <Box width="100%" maxWidth="1300px" mx="auto" overflow="hidden">
                 <Grid item container sx={{ m: 2, overflow: 'hidden' }}>
 
                     <Grid
@@ -62,28 +148,22 @@ const BulletPointPersonaPage = (props) => {
 
 
 
+                        <Grid container spacing={1} sx={{ m: 3 }} alignItems="stretch">
+                            {persona && Object.entries(persona).map(([key, value], index) => (
+                                <Grid item xs key={index} style={{ display: 'flex' }}>
+                                    <InfoCard
+                                        title={key}
+                                        content={value}
+                                        editVisible={edit}
+                                        removeVisible={edit}
+                                    />
+                                </Grid>
+                            ))}
+                        </Grid>
+
                     </Grid>
                 </Grid>
             </Box>
-
-            <Box width="100%" maxWidth="1200px" mx="auto" overflowX="hidden">
-                <Grid container spacing={1} sx={{ m: 3 }}>
-                    {cards.map((card, index) => (
-                        <Grid item xs key={index}>
-                            <InfoCard
-                                title={card.title}
-                                content={card.content}
-                                editVisible={edit}
-                                removeVisible={edit}
-                                onDelete={() => handleDelete(index)}  // Pass the delete callback to InfoCard
-                            />
-                        </Grid>
-                    ))}
-                </Grid>
-            </Box>
-
-
-
 
 
         </div>

@@ -389,6 +389,7 @@ const DomainAndFactorPage = () => {
               rows={2}
               placeholder="Example: I want to set the age as 68 years old; I want to set the gender as female;"
               onChange={(e) => { setExtraDetails(e.target.value) }}
+              value={extraDetails}
             ></textarea>
 
           </Box>

@@ -29,8 +29,8 @@ const InfoCard = ({ title, content, editVisible, removeVisible, onDelete }) => {
 
   return (
     <Box sx={{ minWidth: 400 }}>
-      <Card variant="outlined">
-        <CardContent>
+      <Card variant="outlined" sx={{ display: 'flex', flexDirection: 'column', height: '100%' }}>
+        <CardContent sx={{ flexGrow: 1 }}>
           <Typography sx={{ fontSize: 14 }} color="text.secondary" gutterBottom>
             {title}
           </Typography>

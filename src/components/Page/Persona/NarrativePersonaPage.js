@@ -6,26 +6,100 @@ import * as React from 'react';
 import html2canvas from 'html2canvas';
 import jsPDF from 'jspdf';
 import RegenerateModal from './RegenerateModal';
-
+import { CircularProgress } from '@mui/material';
 
 
 const NarrativePersonaPage = (props) => {
 
-
-  const [testing, setTesting] = React.useState(`Teresa is eight years old and is a third-grade student at St. Augustine Elementary School, a public school. She lives with her mother and father (Maria and Oscar Dieste) in a dormitory town around Madrid, Spain. Teresa has been using computers at school since kindergarten and has had her own computer at home for a year. She has very occasionally used the Internet at home to search for information related to her school work under her parents' supervision.
-Even though Teresa loves to be physically active (she is a keen rhythmic gymnast, dancer and skateboarder), she thinks computers are really, really fun. She uses the Mac mostly to play princess games (dress-up, Dora the explorer, and so), and watch videos on iTunes. Santa Claus brought her a Nintendo DS® console last Christmas. Her current favourite is Cooking Mama 4, although she also likes educational games.
-Teresa also loves TV so much so that her parents have decided to get rid of the only television set that they had at home. Instead they have a password-protected Boxee Box where Teresa can sometimes watch TV over IP. Teresa is not very happy about not having TV at home, but she did not like what her parents told about TV "eating your brain" and has stoically accepted. Her 4-year-old sister Alba goes nowhere near a TV since she heard that it could eat things.`);
   const [edit, setEdit] = React.useState(false);
+
+  const [selectedDomains, setSelectedDomains] = React.useState([]);
+  const [extraDetails, setExtraDetails] = React.useState('');
+  const [selectedExHF, setSelectedExHF] = React.useState([]);
+  const [selectedInHF, setSelectedInHF] = React.useState([]);
+  const [selectedPersonaLength, setSelectedPersonaLength] = React.useState('');
+  const [selectedApproach, setSelectedApproach] = React.useState('narrative');
+  const [selectedStructure, setSelectedStructure] = React.useState('unstructured');
+  const [loading, setLoading] = React.useState(false);
+
+  const [dataLoaded, setDataLoaded] = React.useState(false);
+
+  React.useEffect(() => {
+    const fetchSessionData = () => {
+      setSelectedDomains(JSON.parse(sessionStorage.getItem('selectedDomains') || '[]'));
+      setExtraDetails(sessionStorage.getItem('extraDetails') || '');
+      setSelectedExHF(JSON.parse(sessionStorage.getItem('selectedExHF') || '[]'));
+      setSelectedInHF(JSON.parse(sessionStorage.getItem('selectedInHF') || '[]'));
+      setSelectedPersonaLength(sessionStorage.getItem('selectedPersonaLength') || '');
+
+      setDataLoaded(true);
+    };
+
+    fetchSessionData();
+  }, []);
+
+
+  const [persona, setPersona] = React.useState('');
+  const [error, setError] = React.useState('');
+
+  const generatePersona = async (domains, internalFactors, externalFactors, extraDetails, length) => {
+    setLoading(true); // Start loading
+    const apiUrl = "http://localhost:8081/api/persona/generateNarrativePersona";
+    const domainsStr = domains.join(", ");
+    const internalFactorsStr = internalFactors.join(", ");
+    const externalFactorsStr = externalFactors.join(", ");
+    const bodyData = {
+      domains: domainsStr,
+      internalFactors: internalFactorsStr,
+      externalFactors: externalFactorsStr,
+      extraDetails,
+      length
+    };
+    try {
+      const response = await fetch(apiUrl, {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json'
+        },
+        body: JSON.stringify(bodyData)
+      });
+
+
+      if (!response.ok) {
+        const errorData = await response.json();
+        throw new Error(errorData.error);
+      }
+
+      const data = await response.json();
+      console.log(data);
+      setPersona(data.persona);
+
+    } catch (err) {
+      console.error("Error:", err);
+      setError(err.message);
+    } finally {
+      setLoading(false); // Stop loading
+    }
+  };
+
+  React.useEffect(() => {
+    if (dataLoaded) {
+      const cleanedSelectedPersonaLength = selectedPersonaLength.replace(/^\"|\"$/g, '');
+      generatePersona(selectedDomains, selectedInHF, selectedExHF, extraDetails, cleanedSelectedPersonaLength);
+      console.log(persona);
+    }
+  }, [dataLoaded]);
+
 
 
   const handleEdit = () => {
     edit ? setEdit(false) : setEdit(true);
   };
 
-  const [cardContent, setCardContent] = React.useState(testing);
+
 
   const handleCopyClick = () => {
-    navigator.clipboard.writeText(cardContent).then(() => {
+    navigator.clipboard.writeText(persona).then(() => {
       alert('Content copied to clipboard.');
     }).catch(err => {
       alert('Failed to copy text: ', err);
@@ -73,9 +147,6 @@ Teresa also loves TV so much so that her parents have decided to get rid of the 
 
   };
 
-
-
-
   return (
     <div>
       <Header />
@@ -116,7 +187,18 @@ Teresa also loves TV so much so that her parents have decided to get rid of the 
         </Grid>
 
         <div id="captureArea">
-          <InfoCard name={"Persona"} content={testing} editVisible={edit} removeVisible={false} setContent={setCardContent} />
+          {loading ? (
+            <Grid
+              container
+              style={{ height: '100vh' }}
+              justifyContent="center"
+              alignItems="center"
+            >
+              <CircularProgress />
+            </Grid>
+          ) : (
+            <InfoCard name={"Persona"} content={persona} editVisible={edit} removeVisible={false} setContent={setPersona} />
+          )}
         </div>
 
       </Container>
