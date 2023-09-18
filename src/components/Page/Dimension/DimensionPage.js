@@ -1,5 +1,5 @@
 import * as React from 'react';
-import { Container, Grid, Typography } from '@mui/material';
+import { Container, Grid, Typography, Alert } from '@mui/material';
 import Header from '../../Layout/Header';
 import SingleSelectableList from '../../Layout/SingleSelectableList';
 import { Link } from 'react-router-dom';
@@ -10,7 +10,7 @@ const DimensionPage = (prop) => {
 
   const [personaLength, setPersonaLength] = React.useState(["0 - 100 words", "100 - 200 words", "200 -300 words"]);
   const [approch, setApproach] = React.useState(["Narrative Approach", "Bullet - Point Approach"]);
-  const [structure, setStructure] = React.useState(["Unstructured", "Semi-Structured", "Structured"]);
+  const [structure, setStructure] = React.useState(["Unstructured", "Structured"]);
 
   const [selectedPersonaLength, setSelectedPersonaLength] = React.useState(personaLength[0]);
   const [selectedApproach, setSelectedApproach] = React.useState(approch[0]);
@@ -69,17 +69,22 @@ const DimensionPage = (prop) => {
           justifyContent="center"
           alignItems="flex-start">
 
-          <Grid item container sx={{ m: 3 }}>
+          <Grid item container sx={{ m: 2, mt: 3 }}>
             <Grid container spacing={2}>
               <Grid item xs={8} >
                 <Typography variant="h5" sx={{ fontWeight: 'bold' }}>Select Length</Typography>
+              </Grid>
+              <Grid item xs={8} >
+                <Alert variant="outlined" severity="warning">
+                  If there are too many domains and human factors, the response length can be not what you want.
+                </Alert>
               </Grid>
             </Grid>
           </Grid>
 
           <SingleSelectableList SelectableList itemList={personaLength} selectedItems={selectedPersonaLength} handleToggle={handlePersonaLengthToggle} />
 
-          <Grid item container sx={{ m: 3 }}>
+          <Grid item container sx={{ m: 2, mt: 3 }}>
             <Grid container spacing={2}>
               <Grid item xs={8} >
                 <Typography variant="h5" sx={{ fontWeight: 'bold' }}>Select Narration</Typography>
@@ -89,7 +94,7 @@ const DimensionPage = (prop) => {
 
           <SingleSelectableList SelectableList itemList={approch} selectedItems={selectedApproach} handleToggle={handleApproachToggle} />
 
-          <Grid item container sx={{ m: 3 }}>
+          <Grid item container sx={{ m: 2, mt: 3 }}>
             <Grid container spacing={2}>
               <Grid item xs={8} >
                 <Typography variant="h5" sx={{ fontWeight: 'bold' }}>Select Structure</Typography>
@@ -101,7 +106,7 @@ const DimensionPage = (prop) => {
 
 
 
-          <Grid item container sx={{ m: 3 }}>
+          <Grid item container sx={{ m: 2, mt: 3 }}>
 
             <Grid
               container

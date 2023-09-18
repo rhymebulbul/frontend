@@ -16,15 +16,26 @@ const BulletPointPersonaPage = (props) => {
     const [selectedExHF, setSelectedExHF] = React.useState([]);
     const [selectedInHF, setSelectedInHF] = React.useState([]);
     const [selectedPersonaLength, setSelectedPersonaLength] = React.useState('');
-
+    const [retryCount, setRetryCount] = React.useState(0);
     const [loading, setLoading] = React.useState(false);
 
     const [dataLoaded, setDataLoaded] = React.useState(false);
 
+    const normalizeKey = (key) => {
+        return key.toLowerCase().replace(/\W/g, '');
+    };
+
     const filterObjectByKeys = (obj, keys) => {
-        return keys.reduce((acc, key) => {
-            if (obj.hasOwnProperty(key)) {
-                acc[key] = obj[key];
+        const normalizedObjectKeys = Object.keys(obj).reduce((acc, key) => {
+            acc[normalizeKey(key)] = key;
+            return acc;
+        }, {});
+
+        return keys.reduce((acc, searchKey) => {
+            const normalizedSearchKey = normalizeKey(searchKey);
+            if (normalizedObjectKeys.hasOwnProperty(normalizedSearchKey)) {
+                const originalKey = normalizedObjectKeys[normalizedSearchKey];
+                acc[originalKey] = obj[originalKey];
             }
             return acc;
         }, {});
@@ -62,6 +73,7 @@ const BulletPointPersonaPage = (props) => {
             extraDetails,
             length
         };
+        const cleanedSelectedPersonaLength = selectedPersonaLength.replace(/^\"|\"$/g, '');
         try {
             const response = await fetch(apiUrl, {
                 method: 'POST',
@@ -78,6 +90,7 @@ const BulletPointPersonaPage = (props) => {
             }
 
             const data = await response.json();
+            setRetryCount(0);
             const fullPersona = JSON.parse(data.persona);
             console.log(fullPersona);
             const relevantKeys = [...selectedExHF, ...selectedInHF];
@@ -87,6 +100,12 @@ const BulletPointPersonaPage = (props) => {
         } catch (err) {
             console.error("Error:", err);
             setError(err.message);
+
+            // Retry mechanism
+            if (retryCount < 3) { // You can adjust the max retries
+                setRetryCount(prevCount => prevCount + 1);
+                generatePersona(selectedDomains, selectedInHF, selectedExHF, extraDetails, cleanedSelectedPersonaLength);
+            }
         } finally {
             setLoading(false); // Stop loading
         }
@@ -118,7 +137,7 @@ const BulletPointPersonaPage = (props) => {
     return (
         <div>
             <Header />
-            <Box width="100%" maxWidth="1300px" mx="auto" overflow="hidden">
+            <Box width="100%" maxWidth="1400px" mx="auto" overflow="hidden">
                 <Grid item container sx={{ m: 2, overflow: 'hidden' }}>
 
                     <Grid
@@ -148,21 +167,30 @@ const BulletPointPersonaPage = (props) => {
 
 
 
-                        <Grid container spacing={1} sx={{ m: 3 }} alignItems="stretch">
-                            {persona && Object.entries(persona).map(([key, value], index) => (
-                                <Grid item xs key={index} style={{ display: 'flex' }}>
-                                    <InfoCard
-                                        title={key}
-                                        content={value}
-                                        editVisible={edit}
-                                        removeVisible={edit}
-                                    />
-                                </Grid>
-                            ))}
-                        </Grid>
-
                     </Grid>
                 </Grid>
+
+                {loading && (
+                    <div style={{ display: 'flex', justifyContent: 'center', alignItems: 'center', height: '50vh' }}>
+                        <CircularProgress />
+                    </div>
+                )}
+
+
+                {!loading && (
+                    <Grid container spacing={1} sx={{ m: 3 }} alignItems="stretch">
+                        {persona && Object.entries(persona).reverse().map(([key, value], index) => (
+                            <Grid item xs={4} key={index} style={{ display: 'flex', flexGrow: 1 }}>
+                                <InfoCard
+                                    title={key}
+                                    content={value}
+                                    editVisible={edit}
+                                    removeVisible={edit}
+                                />
+                            </Grid>
+                        ))}
+                    </Grid>
+                )}
             </Box>
 
 
