@@ -1,12 +1,12 @@
 import Header from '../../Layout/Header';
 import NextButton from '../../Layout/NextButton';
-import { Grid, Box, Container } from '@mui/material';
+import { Grid, Box, Alert, Stack } from '@mui/material';
 import InfoCard from '../../Layout/InfoCard';
 import * as React from 'react';
 import RegenerateModal from './RegenerateModal'
 import AddFactorModal from './AddFactorModal';
 import { CircularProgress } from '@mui/material';
-
+import axios from 'axios';
 const BulletPointPersonaPage = (props) => {
 
     const [edit, setEdit] = React.useState(false);
@@ -20,7 +20,15 @@ const BulletPointPersonaPage = (props) => {
     const [loading, setLoading] = React.useState(false);
 
     const [dataLoaded, setDataLoaded] = React.useState(false);
+    const [persona, setPersona] = React.useState(null);
+    const [personaId, setPersonaId] = React.useState(null);
+    const [error, setError] = React.useState('');
 
+    const [alertConfig, setAlertConfig] = React.useState({
+        open: false,
+        message: '',
+        severity: 'success'
+    });
     const normalizeKey = (key) => {
         return key.toLowerCase().replace(/\W/g, '');
     };
@@ -55,11 +63,6 @@ const BulletPointPersonaPage = (props) => {
         fetchSessionData();
     }, []);
 
-
-    const [persona, setPersona] = React.useState(null);
-
-    const [error, setError] = React.useState('');
-
     const generatePersona = async (domains, internalFactors, externalFactors, extraDetails, length) => {
         setLoading(true); // Start loading
         const apiUrl = "http://localhost:8081/api/persona/generateStructuredPersona";
@@ -92,9 +95,7 @@ const BulletPointPersonaPage = (props) => {
             const data = await response.json();
             setRetryCount(0);
             const fullPersona = JSON.parse(data.persona);
-            console.log(fullPersona);
             const relevantKeys = [...selectedExHF, ...selectedInHF];
-            console.log(relevantKeys);
             const filteredPersona = filterObjectByKeys(fullPersona, relevantKeys);
             setPersona(filteredPersona);
         } catch (err) {
@@ -102,7 +103,7 @@ const BulletPointPersonaPage = (props) => {
             setError(err.message);
 
             // Retry mechanism
-            if (retryCount < 3) { // You can adjust the max retries
+            if (retryCount < 3) {
                 setRetryCount(prevCount => prevCount + 1);
                 generatePersona(selectedDomains, selectedInHF, selectedExHF, extraDetails, cleanedSelectedPersonaLength);
             }
@@ -113,33 +114,122 @@ const BulletPointPersonaPage = (props) => {
 
     React.useEffect(() => {
         if (dataLoaded) {
-            const cleanedSelectedPersonaLength = selectedPersonaLength.replace(/^\"|\"$/g, '');
-            generatePersona(selectedDomains, selectedInHF, selectedExHF, extraDetails, cleanedSelectedPersonaLength);
+            generatePersona(selectedDomains, selectedInHF, selectedExHF, extraDetails, selectedPersonaLength);
             console.log(persona);
         }
     }, [dataLoaded]);
 
 
-
-
-
-    const handleDelete = (idToDelete) => {
-
+    const handleDelete = (keyToDelete) => {
+        setPersona(prevPersona => {
+            const updatedPersona = { ...prevPersona };
+            delete updatedPersona[keyToDelete];
+            return updatedPersona;
+        });
     }
 
 
+    const handleCardSave = (keyToUpdate, newContent) => {
+        setPersona(prevPersona => {
+            return {
+                ...prevPersona,
+                [keyToUpdate]: newContent
+            };
+        });
 
+        console.log("change " + persona);
+    }
+
+    const handleRegenerate = () => {
+        setPersonaId(null);
+        generatePersona(selectedDomains, selectedInHF, selectedExHF, extraDetails, selectedPersonaLength);
+    };
 
     const handleEdit = () => {
         edit ? setEdit(false) : setEdit(true);
+        console.log(persona);
+
     };
+
+    const handleSave = async () => {
+        const storedData = JSON.parse(localStorage.getItem('userData'));
+        const token = storedData && storedData.token;
+
+        const data = {
+            domainName: selectedDomains,
+            type: "bulletPoints",
+            content: JSON.stringify(persona)
+        };
+
+        try {
+            let response;
+            if (personaId) {
+                // If personaId exists, update the existing persona
+                response = await axios.put(`http://localhost:8081/api/persona/${personaId}`, data, {
+                    headers: {
+                        'Content-Type': 'application/json',
+                        'Authorization': `Bearer ${token}`
+                    }
+                });
+            } else {
+                // If personaId does not exist, create a new persona
+                response = await axios.post('http://localhost:8081/api/persona/add', data, {
+                    headers: {
+                        'Content-Type': 'application/json',
+                        'Authorization': `Bearer ${token}`
+                    }
+                });
+            }
+
+            if (response.data && response.data.personaId) {
+                setPersonaId(response.data.personaId);
+                console.log("Saved Persona ID:", response.data.personaId);
+            }
+            setAlertConfig({
+                open: true,
+                message: 'Persona saved successfully!',
+                severity: 'success'
+            });
+
+            setTimeout(() => {
+                setAlertConfig(prevState => ({ ...prevState, open: false }));
+            }, 3000);
+        } catch (error) {
+            console.log(error);
+
+            // Update alertConfig for other errors
+            setAlertConfig({
+                open: true,
+                message: 'Error while saving the persona. Please try again.',
+                severity: 'error'
+            });
+
+            setTimeout(() => {
+                setAlertConfig(prevState => ({ ...prevState, open: false }));
+            }, 3000);
+        }
+    };
+
+
+    const handleAddFactor = (newTitle, newContent) => {
+        setPersona(prevPersona => {
+            return {
+                ...prevPersona,
+                [newTitle]: newContent
+            };
+        });
+    };
+
+
+
 
     return (
         <div>
             <Header />
             <Box width="100%" maxWidth="1400px" mx="auto" overflow="hidden">
-                <Grid item container sx={{ m: 2, overflow: 'hidden' }}>
 
+
+                <Grid item container sx={{ m: 3 }}>
                     <Grid
                         container
                         direction="row"
@@ -151,24 +241,24 @@ const BulletPointPersonaPage = (props) => {
                             <NextButton name={edit ? "Edit Mode ON" : "Edit Mode OFF"} onClickCallback={handleEdit} backgroundColourChange={true} />
                         </Grid>
 
-                        <AddFactorModal disabled={edit ? true : false} />
+                        <AddFactorModal disabled={edit ? true : false} onAddFactor={handleAddFactor} />
 
                         <Grid item xs={2} >
                             <NextButton name={"Export As PDF "} disabled={edit ? true : false} />
                         </Grid>
 
                         <Grid item xs={2}>
-                            <RegenerateModal disabled={edit ? true : false} />
+                            <NextButton name={"Regenerate"} onClickCallback={handleRegenerate} disabled={edit ? true : false} />
+
                         </Grid>
 
                         <Grid item xs={2} >
-                            <NextButton name={"Save"} disabled={edit ? true : false} />
+                            <NextButton name={"Save"} onClickCallback={handleSave} disabled={edit ? true : false} />
                         </Grid>
-
-
 
                     </Grid>
                 </Grid>
+
 
                 {loading && (
                     <div style={{ display: 'flex', justifyContent: 'center', alignItems: 'center', height: '50vh' }}>
@@ -178,18 +268,34 @@ const BulletPointPersonaPage = (props) => {
 
 
                 {!loading && (
-                    <Grid container spacing={1} sx={{ m: 3 }} alignItems="stretch">
+                    <Grid container spacing={2} sx={{ m: 2 }} alignItems="stretch">
                         {persona && Object.entries(persona).reverse().map(([key, value], index) => (
-                            <Grid item xs={4} key={index} style={{ display: 'flex', flexGrow: 1 }}>
+                            <Grid item xs={4} key={key} style={{ display: 'flex', flexGrow: 1 }}>
                                 <InfoCard
                                     title={key}
                                     content={value}
-                                    editVisible={edit}
+                                    editVisible={edit} // Pass the edit state
                                     removeVisible={edit}
+                                    onDelete={() => handleDelete(key)}
+
+                                    onSave={(newContent) => handleCardSave(key, newContent)}
                                 />
+
                             </Grid>
                         ))}
                     </Grid>
+                )}
+
+                {alertConfig.open && (
+                    <Stack sx={{ width: '100%', mt: 2 }} spacing={2}>
+                        <Alert
+                            variant="filled"
+                            severity={alertConfig.severity}
+                            onClose={() => setAlertConfig({ ...alertConfig, open: false })}
+                        >
+                            {alertConfig.message}
+                        </Alert>
+                    </Stack>
                 )}
             </Box>
 

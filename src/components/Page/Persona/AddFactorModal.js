@@ -1,13 +1,13 @@
 import React from "react";
 import { Grid } from '@mui/material';
-//import "./Modal.css";
-import Header from "../../Layout/Header";
 import NextButton from "../../Layout/NextButton";
 import Box from '@mui/material/Box';
 import Button from '@mui/material/Button';
 import Typography from '@mui/material/Typography';
 import Modal from '@mui/material/Modal';
 import TextField from '@mui/material/TextField';
+import IconButton from '@mui/material/IconButton';
+import CloseIcon from '@mui/icons-material/Close';
 
 const style = {
   position: 'absolute',
@@ -15,17 +15,28 @@ const style = {
   left: '50%',
   transform: 'translate(-50%, -50%)',
   width: 800,
-  height: 650,
+  height: 400,
   bgcolor: 'background.paper',
-  border: '2px solid #000',
   boxShadow: 24,
   p: 4,
+  borderRadius: 1
+
 };
 
-export default function AddFactorModal({ disabled }) {
+export default function AddFactorModal({ disabled, onAddFactor }) {
   const [open, setOpen] = React.useState(false);
   const handleOpen = () => setOpen(true);
   const handleClose = () => setOpen(false);
+  const [newTitle, setNewTitle] = React.useState('');
+  const [newContent, setNewContent] = React.useState('');
+
+  const handleAdd = () => {
+    if (newTitle.trim() && newContent.trim()) {
+      onAddFactor(newTitle, newContent);
+      handleClose();
+    }
+  };
+
 
   return (
     <div>
@@ -34,17 +45,42 @@ export default function AddFactorModal({ disabled }) {
       </Grid>
       <Modal
         open={open}
-        onClose={handleClose}
         aria-labelledby="modal-modal-title"
         aria-describedby="modal-modal-description"
       >
         <Box sx={style}>
+          <IconButton
+            aria-label="close"
+            onClick={handleClose}
+            sx={{
+              position: 'absolute',
+              right: 20,
+              top: 20,
+              color: (theme) => theme.palette.grey[500]
+            }}
+          >
+            <CloseIcon />
+          </IconButton>
           <Typography id="modal-modal-title" variant="h6" component="h2">
-            Add Human Factor:
+            Add New Human Factor:
           </Typography>
           {/*Need TO link backend*/}
           <Box textAlign={'center'}>
-            <Button ali>Select Factor</Button>
+            <TextField
+              fullWidth
+              type="text"
+              id="content"
+              label="Title"
+              variant="outlined"
+              sx={{ mt: 4 }}
+              inputProps={{
+                style: {
+                  height: "10px",
+                },
+              }}
+              onChange={(e) => { setNewTitle(e.target.value) }}
+            />
+
           </Box>
           <Box textAlign={'Center'}>
             <TextField
@@ -53,13 +89,15 @@ export default function AddFactorModal({ disabled }) {
               id="content"
               label="Description"
               variant="outlined"
+              sx={{ mt: 4, mb: 4 }}
               inputProps={{
                 style: {
-                  height: "400px",
+                  height: "100px",
                 },
               }}
+              onChange={(e) => { setNewContent(e.target.value) }}
             />
-            <Button>Add</Button>
+            <Button onClick={handleAdd} color="primary" variant="contained">Add</Button>
           </Box>
         </Box>
       </Modal>

@@ -44,6 +44,7 @@ const NarrativePersonaPage = (props) => {
   const [persona, setPersona] = React.useState('');
   const [error, setError] = React.useState('');
 
+  const [personaId, setPersonaId] = React.useState(null);
   React.useEffect(() => {
     const fetchSessionData = () => {
       setSelectedDomains(JSON.parse(sessionStorage.getItem('selectedDomains') || '[]'));
@@ -88,7 +89,6 @@ const NarrativePersonaPage = (props) => {
       }
 
       const data = await response.json();
-      console.log(data);
       setPersona(data.persona);
 
     } catch (err) {
@@ -104,24 +104,14 @@ const NarrativePersonaPage = (props) => {
     if (dataLoaded) {
       const cleanedSelectedPersonaLength = selectedPersonaLength.replace(/^\"|\"$/g, '');
       generatePersona(selectedDomains, selectedInHF, selectedExHF, extraDetails, cleanedSelectedPersonaLength);
-      console.log(persona);
-
     }
   }, [dataLoaded]);
-
-  React.useEffect(() => {
-    if (persona) {
-      handleSave();
-    }
-  }, [persona]);
-
 
 
   const handleEdit = () => {
     edit ? setEdit(false) : setEdit(true);
+
   };
-
-
 
   const handleCopyClick = () => {
     navigator.clipboard.writeText(persona).then(() => {
@@ -187,8 +177,10 @@ const NarrativePersonaPage = (props) => {
   };
 
   const handleRenerate = () => {
+    setPersonaId(null);
     const cleanedSelectedPersonaLength = selectedPersonaLength.replace(/^\"|\"$/g, '');
     generatePersona(selectedDomains, selectedInHF, selectedExHF, extraDetails, cleanedSelectedPersonaLength);
+
   };
 
   const handleSave = async () => {
@@ -202,25 +194,38 @@ const NarrativePersonaPage = (props) => {
     };
 
     try {
-      const response = await axios.post('http://localhost:8081/api/persona/add', data, {
-        headers: {
-          'Content-Type': 'application/json',
-          'Authorization': `Bearer ${token}`
-        }
-      });
+      let response;
+      if (personaId) {
+        // If personaId exists, update the existing persona
+        response = await axios.put(`http://localhost:8081/api/persona/${personaId}`, data, {
+          headers: {
+            'Content-Type': 'application/json',
+            'Authorization': `Bearer ${token}`
+          }
+        });
+      } else {
+        // If personaId does not exist, create a new persona
+        response = await axios.post('http://localhost:8081/api/persona/add', data, {
+          headers: {
+            'Content-Type': 'application/json',
+            'Authorization': `Bearer ${token}`
+          }
+        });
+      }
 
-
+      if (response.data && response.data.personaId) {
+        setPersonaId(response.data.personaId);
+        console.log("Saved Persona ID:", response.data.personaId);
+      }
       setAlertConfig({
         open: true,
         message: 'Persona saved successfully!',
         severity: 'success'
       });
 
-
       setTimeout(() => {
         setAlertConfig(prevState => ({ ...prevState, open: false }));
       }, 3000);
-
     } catch (error) {
       console.log(error);
 
@@ -254,7 +259,7 @@ const NarrativePersonaPage = (props) => {
           >
 
             <Grid item xs={2} >
-              <NextButton name={edit ? "Edit Mode ON" : "Edit Mode OFF"} onClickCallback={handleEdit} backgroundColourChange={true} disabled={loading} />
+              <NextButton name={edit ? "Edit MOde On" : "Edit Mode"} onClickCallback={handleEdit} backgroundColourChange={true} disabled={loading} />
             </Grid>
 
 
@@ -268,6 +273,10 @@ const NarrativePersonaPage = (props) => {
 
             <Grid item xs={2}>
               <NextButton name={"Regenerate"} onClickCallback={handleRenerate} disabled={edit ? true : loading} />
+            </Grid>
+
+            <Grid item xs={2}>
+              <NextButton name={"Save"} onClickCallback={handleSave} disabled={edit ? true : loading} />
             </Grid>
 
           </Grid>
@@ -289,7 +298,7 @@ const NarrativePersonaPage = (props) => {
               </Grid>
             ) : (
               <>
-                <InfoCard name={"Persona"} content={persona} editVisible={edit} removeVisible={false} setContent={setPersona} />
+                <InfoCard name={"Persona"} content={persona} editVisible={edit} removeVisible={false} onSave={setPersona} />
               </>
             )}
 
