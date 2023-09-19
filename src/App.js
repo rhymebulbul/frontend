@@ -22,6 +22,7 @@ function App() {
           <Route path="/review" element={<ReviewPage />} />
           <Route path="/domainAndFactor" element={<DomainAndFactorPage />} />
           <Route path="/narrativePersona" element={<NarrativedPersonaPage />} />
+          <Route path="/narrativePersona/:personaId" element={<NarrativedPersonaPage />} />
           <Route path="/dimension" element={<DimensionPage />} />
           <Route path="/bulletPointPersona" element={<BulletPointPersonaPage />} />
           <Route path="/signin" element={<SignIn />} />

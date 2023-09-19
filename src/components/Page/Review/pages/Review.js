@@ -4,45 +4,66 @@ import PersonaList from "../components/PersonaList";
 import SliderFilter from "../components/SliderFilter";
 import Select from 'react-select';
 import Header from '../../../Layout/Header';
-const PERSONA_FAKE = [
-  {
-    id: "p1",
-    name: "name 1",
-    age: 10,
-    domain: "teaching",
-  },
-  {
-    id: "p2",
-    name: "name 2",
-    age: 30,
-    domain: "learn",
-  },
-  {
-    id: "p3",
-    name: "name 3",
-    age: 60,
-    domain: "makeing friends",
-  },
-];
+
 
 
 const Review = (props) => {
 
+  const storedData = JSON.parse(localStorage.getItem('userData'));
+  const token = storedData && storedData.token;
+
   const option = [{ value: null, label: 'All' }];
+  const [personaList, setPersonaList] = React.useState([]);
 
-  PERSONA_FAKE.map((p) => (
-    option.push({
-      value: p.domain,
-      label: p.domain
-    })
-  ));
+  const buildOptions = () => {
+    const baseOption = [{ value: null, label: 'All' }];
+    personaList.forEach((p) => {
+      if (p.domainName && Array.isArray(p.domainName)) {  // Check for existence and type
+        p.domainName.forEach(domain => {
+          baseOption.push({
+            value: domain,
+            label: domain
+          });
+        });
+      }
+    });
+    return baseOption;
+  };
 
-  const [ageValue, setAgeValue] = useState([0, 100]);
+
+  React.useEffect(() => {
+
+    fetchUserPersona();
+    const option = buildOptions();
+    console.log(option);
+    console.log("Persona List Updated:", personaList);
+
+  }, []);
+  const fetchUserPersona = async () => {
+    try {
+
+      const response = await fetch(
+        'http://localhost:8081/api/persona/getAllPersona',
+        {
+          headers: {
+            'Authorization': `Bearer ${token}` // Send token in Authorization header
+          }
+        }
+      );
+
+      const data = await response.json();
+      setPersonaList(data);
+      console.log(personaList);
+
+    } catch (error) {
+      console.error("There was an error fetching all the user persona:", error);
+    }
+  }
+
   const [domainFilter, setDomainFilter] = useState(null);
 
   const handleSliderChange = (values) => {
-    // Handle the slider value change, e.g., filter data based on the slider values
-    setAgeValue(values);
+
   };
 
   const handlerDomainChange = (domain) => {
@@ -55,17 +76,13 @@ const Review = (props) => {
       <Fragment>
         <div className={classes.main}>
           <div className={classes.filter}>
-            <h3>Age range</h3>
-            <SliderFilter
-              minValue={0}
-              maxValue={100}
-              onChange={handleSliderChange}
-            />
+
             <h3>Domain</h3>
             <Select options={option} value={domainFilter} onChange={handlerDomainChange} />
           </div>
           <div className={classes.personas}>
-            <PersonaList personas={PERSONA_FAKE} ageRange={ageValue} domain={domainFilter} />
+            <PersonaList personas={personaList} domain={domainFilter} />
+
           </div>
         </div>
       </Fragment>

@@ -7,7 +7,7 @@ import html2canvas from 'html2canvas';
 import jsPDF from 'jspdf';
 import axios from 'axios';
 import { CircularProgress } from '@mui/material';
-
+import { useParams } from 'react-router-dom';
 const renderChips = (items, label) => {
   if (!items || !items.length) return null;
 
@@ -21,6 +21,7 @@ const renderChips = (items, label) => {
   );
 };
 const NarrativePersonaPage = (props) => {
+  const { personaId: urlPersonaId } = useParams();
 
   const [edit, setEdit] = React.useState(false);
 
@@ -56,7 +57,7 @@ const NarrativePersonaPage = (props) => {
       setDataLoaded(true);
     };
 
-    fetchSessionData();
+    if (!urlPersonaId) { fetchSessionData() };
   }, []);
 
 
@@ -100,12 +101,38 @@ const NarrativePersonaPage = (props) => {
     }
   };
 
+  const fetchPersonaById = async (id) => {
+    try {
+      setLoading(true);
+      const response = await axios.get(`http://localhost:8081/api/persona/narrativePersona/${id}`);
+      if (response.data && response.data.content) {
+
+        setPersona(response.data.content);
+        setPersonaId(id);
+        setSelectedDomains(response.data.domainName);
+        setSelectedExHF(response.data.externalFactors);
+        setSelectedInHF(response.data.internalFactors);
+      } else {
+        setError('Failed to fetch persona');
+      }
+    } catch (err) {
+      console.error("Error:", err);
+      setError(err.message);
+    } finally {
+      setLoading(false);
+    }
+  };
+
   React.useEffect(() => {
-    if (dataLoaded) {
+    if (urlPersonaId) {
+      // If a persona ID is provided in the URL, fetch that persona
+      fetchPersonaById(urlPersonaId);
+    } else if (dataLoaded) {
+      // Otherwise, if data is loaded from session, generate a new persona
       const cleanedSelectedPersonaLength = selectedPersonaLength.replace(/^\"|\"$/g, '');
       generatePersona(selectedDomains, selectedInHF, selectedExHF, extraDetails, cleanedSelectedPersonaLength);
     }
-  }, [dataLoaded]);
+  }, [dataLoaded, urlPersonaId]);
 
 
   const handleEdit = () => {
@@ -190,8 +217,12 @@ const NarrativePersonaPage = (props) => {
     const data = {
       domainName: selectedDomains,
       type: "narrative",
-      content: persona
+      content: persona,
+      internalFactors: selectedInHF,
+      externalFactors: selectedExHF
     };
+
+    console.log(data);
 
     try {
       let response;
@@ -272,7 +303,7 @@ const NarrativePersonaPage = (props) => {
             </Grid>
 
             <Grid item xs={2}>
-              <NextButton name={"Regenerate"} onClickCallback={handleRenerate} disabled={edit ? true : loading} />
+              <NextButton name={"Regenerate"} onClickCallback={handleRenerate} disabled={edit || urlPersonaId ? true : loading} />
             </Grid>
 
             <Grid item xs={2}>
