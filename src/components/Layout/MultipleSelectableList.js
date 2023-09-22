@@ -18,7 +18,7 @@ const MultipleSelectableList = ({ itemList, selectedItems, handleToggle }) => {
                     checked={selectedItems.indexOf(value) !== -1}
                     tabIndex={-1}
                     disableRipple
-                    inputProps={{ 'aria-labelledby': labelId }}
+                    inputProps={{ 'aria-labelledby': "01" }}
                   />
                 </ListItemIcon>
                 <ListItemText id={labelId} primary={value} style={{ whiteSpace: 'nowrap', textOverflow: 'ellipsis' }} />
