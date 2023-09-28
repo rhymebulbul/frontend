@@ -25,19 +25,23 @@ function App() {
     routes = (
       <Routes>
         <Route path="/" element={<Home />} />
-          <Route path="/review" element={<ReviewPage />} />
-          <Route path="/domainAndFactor" element={<DomainAndFactorPage />} />
-          <Route path="/narrativePersona" element={<NarrativedPersonaPage />} />
-          <Route
-            path="/narrativePersona/:personaId"
-            element={<NarrativedPersonaPage />}
-          />
-          <Route path="/dimension" element={<DimensionPage />} />
-          <Route
-            path="/bulletPointPersona"
-            element={<BulletPointPersonaPage />}
-          />
-          <Route path="*" element={<Navigate to="/" replace />} />
+        <Route path="/review" element={<ReviewPage />} />
+        <Route path="/domainAndFactor" element={<DomainAndFactorPage />} />
+        <Route path="/narrativePersona" element={<NarrativedPersonaPage />} />
+        <Route
+          path="/narrativePersona/:personaId"
+          element={<NarrativedPersonaPage />}
+        />
+        <Route path="/dimension" element={<DimensionPage />} />
+        <Route
+          path="/bulletPointPersona"
+          element={<BulletPointPersonaPage />}
+        />
+        <Route
+          path="/bulletPointPersona/:personaId"
+          element={<BulletPointPersonaPage />}
+        />
+        <Route path="*" element={<Navigate to="/" replace />} />
       </Routes>
     );
   } else {
@@ -57,7 +61,7 @@ function App() {
       <Router>
         <main>{routes}</main>
       </Router>
-      
+
     </AuthContext.Provider>
   );
 }

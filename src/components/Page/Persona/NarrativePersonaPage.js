@@ -30,8 +30,6 @@ const NarrativePersonaPage = (props) => {
   const [selectedExHF, setSelectedExHF] = React.useState([]);
   const [selectedInHF, setSelectedInHF] = React.useState([]);
   const [selectedPersonaLength, setSelectedPersonaLength] = React.useState('');
-  const [selectedApproach, setSelectedApproach] = React.useState('narrative');
-  const [selectedStructure, setSelectedStructure] = React.useState('unstructured');
   const [loading, setLoading] = React.useState(false);
 
   const [dataLoaded, setDataLoaded] = React.useState(false);
@@ -112,6 +110,7 @@ const NarrativePersonaPage = (props) => {
         setSelectedDomains(response.data.domainName);
         setSelectedExHF(response.data.externalFactors);
         setSelectedInHF(response.data.internalFactors);
+
       } else {
         setError('Failed to fetch persona');
       }
@@ -127,6 +126,7 @@ const NarrativePersonaPage = (props) => {
     if (urlPersonaId) {
       // If a persona ID is provided in the URL, fetch that persona
       fetchPersonaById(urlPersonaId);
+      console.log(persona);
     } else if (dataLoaded) {
       // Otherwise, if data is loaded from session, generate a new persona
       const cleanedSelectedPersonaLength = selectedPersonaLength.replace(/^\"|\"$/g, '');

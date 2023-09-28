@@ -7,7 +7,9 @@ import RegenerateModal from './RegenerateModal'
 import AddFactorModal from './AddFactorModal';
 import { CircularProgress } from '@mui/material';
 import axios from 'axios';
+import { useParams } from 'react-router-dom';
 const BulletPointPersonaPage = (props) => {
+    const { personaId: urlPersonaId } = useParams();
 
     const [edit, setEdit] = React.useState(false);
 
@@ -60,8 +62,25 @@ const BulletPointPersonaPage = (props) => {
             setDataLoaded(true);
         };
 
-        fetchSessionData();
+        if (!urlPersonaId) { fetchSessionData() };
     }, []);
+
+    const isValidPersona = (persona) => {
+        // Check if the persona is an object
+        if (typeof persona !== 'object' || persona === null || Array.isArray(persona)) {
+            return false;
+        }
+
+        // Check if all attributes are strings
+        for (let key in persona) {
+            if (typeof persona[key] !== 'string') {
+                return false;
+            }
+        }
+
+        return true;
+    };
+
 
     const generatePersona = async (domains, internalFactors, externalFactors, extraDetails, length) => {
         setLoading(true); // Start loading
@@ -95,6 +114,13 @@ const BulletPointPersonaPage = (props) => {
             const data = await response.json();
             setRetryCount(0);
             const fullPersona = JSON.parse(data.persona);
+            console.log(fullPersona);
+
+            // Validate the persona structure
+            if (!isValidPersona(fullPersona)) {
+                throw new Error("Invalid persona structure");
+            }
+
             const relevantKeys = [...selectedExHF, ...selectedInHF];
             const filteredPersona = filterObjectByKeys(fullPersona, relevantKeys);
             setPersona(filteredPersona);
@@ -112,13 +138,36 @@ const BulletPointPersonaPage = (props) => {
         }
     };
 
-    React.useEffect(() => {
-        if (dataLoaded) {
-            generatePersona(selectedDomains, selectedInHF, selectedExHF, extraDetails, selectedPersonaLength);
-            console.log(persona);
-        }
-    }, [dataLoaded]);
+    const fetchPersonaById = async (id) => {
+        try {
+            setLoading(true);
+            const response = await axios.get(`http://localhost:8081/api/persona/bulletPointPersona/${id}`);
+            if (response.data && response.data.content) {
 
+                setPersona(JSON.parse(response.data.content));
+                setPersonaId(id);
+
+            } else {
+                setError('Failed to fetch persona');
+            }
+        } catch (err) {
+            console.error("Error:", err);
+            setError(err.message);
+        } finally {
+            setLoading(false);
+        }
+    };
+
+    React.useEffect(() => {
+        if (urlPersonaId) {
+            // If a persona ID is provided in the URL, fetch that persona
+            fetchPersonaById(urlPersonaId);
+            console.log(persona);
+        } else if (dataLoaded) {
+            // Otherwise, if data is loaded from session, generate a new persona
+            generatePersona(selectedDomains, selectedInHF, selectedExHF, extraDetails, selectedPersonaLength);
+        }
+    }, [dataLoaded, urlPersonaId]);
 
     const handleDelete = (keyToDelete) => {
         setPersona(prevPersona => {
@@ -238,22 +287,22 @@ const BulletPointPersonaPage = (props) => {
                     >
 
                         <Grid item xs={2} >
-                            <NextButton name={edit ? "Edit Mode ON" : "Edit Mode OFF"} onClickCallback={handleEdit} backgroundColourChange={true} />
+                            <NextButton name={edit ? "Edit Mode ON" : "Edit Mode OFF"} onClickCallback={handleEdit} backgroundColourChange={true} disabled={loading} />
                         </Grid>
 
-                        <AddFactorModal disabled={edit ? true : false} onAddFactor={handleAddFactor} />
+                        <AddFactorModal disabled={edit ? true : loading} onAddFactor={handleAddFactor} />
 
                         <Grid item xs={2} >
-                            <NextButton name={"Export As PDF "} disabled={edit ? true : false} />
+                            <NextButton name={"Export As PDF "} disabled={edit ? true : loading} />
                         </Grid>
 
                         <Grid item xs={2}>
-                            <NextButton name={"Regenerate"} onClickCallback={handleRegenerate} disabled={edit ? true : false} />
+                            <NextButton name={"Regenerate"} onClickCallback={handleRegenerate} disabled={edit || urlPersonaId ? true : loading} />
 
                         </Grid>
 
                         <Grid item xs={2} >
-                            <NextButton name={"Save"} onClickCallback={handleSave} disabled={edit ? true : false} />
+                            <NextButton name={"Save"} onClickCallback={handleSave} disabled={edit ? true : loading} />
                         </Grid>
 
                     </Grid>
